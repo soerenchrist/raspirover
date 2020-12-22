@@ -50,10 +50,17 @@
                Aspect="AspectFit"
                x:Name="TakenImage"/>
 
-        <Button x:Name="TakeImageButton"
-                Grid.Row="0"
-                Grid.Column="1"
-                HorizontalOptions="End"
-                Text="Foto"/>
+        <StackLayout Grid.Row="0"
+                     Grid.Column="1"
+                     HorizontalOptions="End"
+                     Orientation="Horizontal">
+
+            <Button x:Name="TakeImageButton"
+                    HorizontalOptions="End"
+                    Text="Foto"/>
+
+            <Button x:Name="VideoButton"
+                    Text="Video"/>
+        </StackLayout>
     </Grid>
 </xamForms:ReactiveContentPage>

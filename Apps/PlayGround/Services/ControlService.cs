@@ -85,6 +85,28 @@ namespace PlayGround.Services
             catch (Exception) { }
         }
 
+        public async Task StartVideo()
+        {
+            if (_connection == null || _connection.State != HubConnectionState.Connected)
+                return;
+            try
+            {
+                await _connection.SendAsync("StartVideo");
+            }
+            catch (Exception) { }
+        }
+
+        public async Task StopVideo()
+        {
+            if (_connection == null || _connection.State != HubConnectionState.Connected)
+                return;
+            try
+            {
+                await _connection.SendAsync("StopVideo");
+            }
+            catch (Exception) { }
+        }
+
         public async Task SetSpeed(int speed)
         {
             if (_connection == null || _connection.State != HubConnectionState.Connected)

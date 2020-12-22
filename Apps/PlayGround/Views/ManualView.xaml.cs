@@ -33,6 +33,12 @@ namespace PlayGround.Views
                     .DisposeWith(disposable);
                 this.BindCommand(ViewModel, x => x.TakeImageCommand, x => x.TakeImageButton)
                     .DisposeWith(disposable);
+                this.BindCommand(ViewModel, x => x.VideoCommand, x => x.VideoButton)
+                    .DisposeWith(disposable);
+
+                this.OneWayBind(ViewModel, x => x.VideoRunning, x => x.VideoButton.Text,
+                        x => x ? "Stop" : "Video")
+                    .DisposeWith(disposable);
             });
         }
     }

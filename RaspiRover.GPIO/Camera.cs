@@ -1,4 +1,6 @@
 ﻿using RaspiRover.GPIO.Contracts;
+using System;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Camera;
@@ -11,13 +13,27 @@ namespace RaspiRover.GPIO
         {
             var image = Pi.Camera.CaptureImageAsync(new CameraStillSettings
             {
-                CaptureWidth = 640,
-                CaptureHeight = 480,
-                CaptureJpegQuality = 92,
+                CaptureWidth = 320,
+                CaptureHeight = 240,
+                CaptureJpegQuality = 50,
+                CaptureDisplayPreview = false,
                 CaptureTimeoutMilliseconds = 300
             });
 
             return image;
+        }
+
+        public IObservable<byte[]> StartVideoStream()
+        {
+            return Observable.Interval(TimeSpan.FromSeconds(.5))
+                .Select(x => Pi.Camera.CaptureImage(new CameraStillSettings
+                {
+                    CaptureWidth = 320,
+                    CaptureHeight = 240,
+                    CaptureJpegQuality = 50,
+                    CaptureDisplayPreview = false,
+                    CaptureTimeoutMilliseconds = 300
+                }));
         }
     }
 }

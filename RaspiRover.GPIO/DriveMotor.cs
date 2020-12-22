@@ -1,14 +1,13 @@
-using System;
-using System.Device.Gpio;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using RaspiRover.GPIO.Contracts;
+using System;
 using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Abstractions;
 using Unosquare.WiringPi;
 
 namespace RaspiRover.GPIO
 {
-    public class DriveMotor : IDriveMotor, IDisposable
+    public sealed class DriveMotor : IDriveMotor, IDisposable
     {
         private int _speed;
         private readonly int _gpioBackward;
@@ -33,23 +32,22 @@ namespace RaspiRover.GPIO
             _backwardPwm.StartSoftPwm(0, 100);
         }
 
-        public int Speed
-        {
+        public int Speed {
             get => _speed;
-            set
-            {
+            set {
                 if (value > 100)
                     value = 100;
                 if (value < -100)
                     value = -100;
-                
+
                 _speed = value;
 
                 if (_speed == 0)
                 {
                     _forwardPwm.SoftPwmValue = 0;
                     _backwardPwm.SoftPwmValue = 0;
-                } else if (_speed > 0)
+                }
+                else if (_speed > 0)
                 {
                     _forwardPwm.SoftPwmValue = _speed;
                     _backwardPwm.SoftPwmValue = 0;

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,8 +23,14 @@ namespace RaspiRover.Server
         {
             Pi.Init<BootstrapWiringPi>();
 
-            services.AddSignalR();
+            services.AddSignalR(o =>
+            {
+
+                o.EnableDetailedErrors = true;
+                o.MaximumReceiveMessageSize = 102400;
+            });
             services.AddControllers();
+            services.AddHostedService<RaspberryHubClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

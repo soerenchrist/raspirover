@@ -27,10 +27,25 @@ namespace PlayGround.ViewModels
         }
 
         public ReactiveCommand<Unit, Unit> TakeImageCommand { get; }
+        public ReactiveCommand<Unit, Unit> VideoCommand { get; }
+
+        private bool _videoRunning;
+        public bool VideoRunning {
+            get => _videoRunning;
+            set => this.RaiseAndSetIfChanged(ref _videoRunning, value);
+        }
 
         public ManualViewModel()
         {
             TakeImageCommand = ReactiveCommand.CreateFromTask(x => ControlService.Current.TakeImage());
+            VideoCommand = ReactiveCommand.Create(() =>
+            {
+                if (VideoRunning)
+                    ControlService.Current.StopVideo();
+                else
+                    ControlService.Current.StartVideo();
+                VideoRunning = !VideoRunning;
+            });
 
             this.WhenAnyValue(x => x.Speed)
                 .Do(async x => await ControlService.Current.SetSpeed(x))

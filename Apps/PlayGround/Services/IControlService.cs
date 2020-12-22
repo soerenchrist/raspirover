@@ -13,5 +13,7 @@ namespace PlayGround.Services
         Task SetSpeed(int speed);
         Task SetSteerPosition(int steerPosition);
         Task TakeImage();
+        Task StartVideo();
+        Task StopVideo();
     }
 }

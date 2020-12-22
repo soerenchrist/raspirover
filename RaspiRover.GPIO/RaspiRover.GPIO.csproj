@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
@@ -10,6 +10,7 @@
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
       <PackageReference Include="System.Device.Gpio" Version="1.2.0" />
+      <PackageReference Include="System.Reactive" Version="5.0.0" />
       <PackageReference Include="Unosquare.Raspberry.IO" Version="0.27.1" />
       <PackageReference Include="Unosquare.WiringPi" Version="0.5.1" />
     </ItemGroup>
