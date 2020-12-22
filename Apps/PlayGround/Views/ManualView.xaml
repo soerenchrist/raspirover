@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<xamForms:ReactiveContentPage x:TypeArguments="viewModels:ManualViewModel"
+                              xmlns="http://xamarin.com/schemas/2014/forms"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                              xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
+                              xmlns:controls="clr-namespace:PlayGround.Controls;assembly=PlayGround"
+                              xmlns:viewModels="clr-namespace:PlayGround.ViewModels;assembly=PlayGround"
+                              x:Class="PlayGround.Views.ManualView"
+                              Shell.NavBarIsVisible="False">
+    <Grid ColumnDefinitions="*,*"
+          RowDefinitions="50, *">
+        <controls:SpeedSlider
+            x:Name="SpeedSlider"
+            Grid.Row="1"
+            NegativeColor="{StaticResource AccentColor2}"
+            PositiveColor="{StaticResource AccentColor}"
+            Grid.Column="0" />
+        <controls:SteerSlider
+            x:Name="SteerSlider"
+            Grid.Row="1"
+            RightColor="{StaticResource AccentColor}"
+            LeftColor="{StaticResource AccentColor2}"
+            Grid.Column="1" />
+        <BoxView WidthRequest="4"
+                 Grid.Row="1"
+                 BackgroundColor="#eeeeee"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="2"
+                 HorizontalOptions="Center"
+                 VerticalOptions="FillAndExpand"/>
+
+        <BoxView WidthRequest="20"
+                 HeightRequest="20"
+                 Grid.Row="0"
+                 x:Name="ConnectionState"
+                 Grid.ColumnSpan="2"
+                 Grid.Column="0"
+                 HorizontalOptions="Center"
+                 VerticalOptions="Start"
+                 />
+        <Image HeightRequest="240"
+               WidthRequest="320"
+               Grid.Column="0"
+               Grid.Row="0"
+               Grid.RowSpan="2"
+               Grid.ColumnSpan="2"
+               HorizontalOptions="Center"
+               VerticalOptions="Start"
+               Aspect="AspectFit"
+               x:Name="TakenImage"/>
+
+        <Button x:Name="TakeImageButton"
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalOptions="End"
+                Text="Foto"/>
+    </Grid>
+</xamForms:ReactiveContentPage>

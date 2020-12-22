@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<xamForms:ReactiveContentPage x:TypeArguments="viewModels:CalibrateViewModel" 
+                              xmlns="http://xamarin.com/schemas/2014/forms"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                              xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
+                              xmlns:viewModels="clr-namespace:PlayGround.ViewModels;assembly=PlayGround"
+                              x:Class="PlayGround.Views.CalibrateView"
+                              Title="Kalibrierung"
+                              Shell.NavBarIsVisible="False">
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, *, Auto"
+              Padding="16">
+            <Label x:Name="PositionLabel"
+                   FontSize="Large"
+                   HorizontalOptions="Center"
+                   FontAttributes="Bold" />
+            
+            <Grid Grid.Row="1"
+                  ColumnDefinitions="*,*,*">
+                
+                <Label x:Name="XMagLabel"
+                       Grid.Column="0"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"
+                       TextColor="Red"
+                       FontSize="Large"/>
+                <Label x:Name="YMagLabel"
+                       Grid.Column="1"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"
+                       TextColor="Green"
+                       FontSize="Large"/>
+                <Label x:Name="ZMagLabel"
+                       Grid.Column="2"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       FontAttributes="Bold"
+                       TextColor="Blue"
+                       FontSize="Large"/>
+            </Grid>
+            
+            <Button Text="Speichern"
+                    Grid.Row="2"
+                    x:Name="SaveButton"/>
+        </Grid>
+    </ContentPage.Content>
+</xamForms:ReactiveContentPage>

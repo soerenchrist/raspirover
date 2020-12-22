@@ -1,13 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspiRover", "RaspiRover\RaspiRover.csproj", "{1B2083FF-CD0B-4ACF-8160-8D91F47AB1AF}"
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaspiRover", "RaspiRover\RaspiRover.csproj", "{1B2083FF-CD0B-4ACF-8160-8D91F47AB1AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspiRover.GPIO", "RaspiRover.GPIO\RaspiRover.GPIO.csproj", "{515E9A37-28C1-40EE-B8F5-C6168622A0A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaspiRover.GPIO", "RaspiRover.GPIO\RaspiRover.GPIO.csproj", "{515E9A37-28C1-40EE-B8F5-C6168622A0A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspiRover.Models", "RaspiRover.Models\RaspiRover.Models.csproj", "{FC02E716-1A58-4926-AA85-70014A8A6C75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaspiRover.Models", "RaspiRover.Models\RaspiRover.Models.csproj", "{FC02E716-1A58-4926-AA85-70014A8A6C75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspiRover.Server", "RaspiRover.Server\RaspiRover.Server.csproj", "{2B9A86B4-6202-442B-B828-52FE0677C32A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RaspiRover.Server", "RaspiRover.Server\RaspiRover.Server.csproj", "{2B9A86B4-6202-442B-B828-52FE0677C32A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{6EB8BC8A-8132-4959-8161-70248CA022FB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayGround", "Apps\PlayGround\PlayGround.csproj", "{54F34738-BE92-4108-A5B1-600BF946001B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayGround.Android", "Apps\PlayGround.Android\PlayGround.Android.csproj", "{09ACB57D-BF38-45A5-8EE2-C700A1B2F1E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayGround.iOS", "Apps\PlayGround.iOS\PlayGround.iOS.csproj", "{2E0D17D0-94E9-4E41-87A7-87A720432B74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,7 +41,29 @@ Global
 		{2B9A86B4-6202-442B-B828-52FE0677C32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B9A86B4-6202-442B-B828-52FE0677C32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B9A86B4-6202-442B-B828-52FE0677C32A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54F34738-BE92-4108-A5B1-600BF946001B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54F34738-BE92-4108-A5B1-600BF946001B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54F34738-BE92-4108-A5B1-600BF946001B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54F34738-BE92-4108-A5B1-600BF946001B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09ACB57D-BF38-45A5-8EE2-C700A1B2F1E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09ACB57D-BF38-45A5-8EE2-C700A1B2F1E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09ACB57D-BF38-45A5-8EE2-C700A1B2F1E5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{09ACB57D-BF38-45A5-8EE2-C700A1B2F1E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09ACB57D-BF38-45A5-8EE2-C700A1B2F1E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E0D17D0-94E9-4E41-87A7-87A720432B74}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+		{2E0D17D0-94E9-4E41-87A7-87A720432B74}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+		{2E0D17D0-94E9-4E41-87A7-87A720432B74}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
+		{2E0D17D0-94E9-4E41-87A7-87A720432B74}.Release|Any CPU.Build.0 = Release|iPhoneSimulator
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{54F34738-BE92-4108-A5B1-600BF946001B} = {6EB8BC8A-8132-4959-8161-70248CA022FB}
+		{09ACB57D-BF38-45A5-8EE2-C700A1B2F1E5} = {6EB8BC8A-8132-4959-8161-70248CA022FB}
+		{2E0D17D0-94E9-4E41-87A7-87A720432B74} = {6EB8BC8A-8132-4959-8161-70248CA022FB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B9DB2111-76DA-43C8-8D4B-E59CE4DF6301}
 	EndGlobalSection
 EndGlobal

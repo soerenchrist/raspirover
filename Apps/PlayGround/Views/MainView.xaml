@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<xamForms:ReactiveContentPage x:TypeArguments="viewModels:MainViewModel" 
+                              xmlns="http://xamarin.com/schemas/2014/forms"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                              xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
+                              xmlns:viewModels="clr-namespace:PlayGround.ViewModels;assembly=PlayGround"
+                              x:Class="PlayGround.Views.MainView"
+                              Shell.NavBarIsVisible="False">
+    <ContentPage.Content>
+        <Grid RowDefinitions="40,*,*,*"
+              ColumnDefinitions="*,*"
+              ColumnSpacing="0"
+              Padding="20,40">
+            <Button Text="Gyroskop"
+                    x:Name="GyroControlButton"
+                    Grid.Row="0"
+                    CornerRadius="8"
+                    HeightRequest="20"
+                    Grid.Column="0"/>
+
+            <Button Text="Touchscreen"
+                    Grid.Row="0"
+                    HeightRequest="20"
+                    CornerRadius="8"
+                    x:Name="TouchControlButton"
+                    Grid.Column="1"/>
+
+            <Button Text="Rover starten"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    VerticalOptions="Center"
+                    x:Name="StartRoverButton"/>
+
+            <Button Text="Kalibrieren"
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    VerticalOptions="Center"
+                    x:Name="CalibrateButton"/>
+            <Button Text="Einstellungen"
+                    Grid.Row="3"
+                    Grid.ColumnSpan="2"
+                    VerticalOptions="Center"
+                    x:Name="StartSettingsButton"/>
+        </Grid>
+    </ContentPage.Content>
+</xamForms:ReactiveContentPage>
