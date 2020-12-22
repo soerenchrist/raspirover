@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspiRover", "RaspiRover\RaspiRover.csproj", "{1B2083FF-CD0B-4ACF-8160-8D91F47AB1AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspiRover.GPIO", "RaspiRover.GPIO\RaspiRover.GPIO.csproj", "{515E9A37-28C1-40EE-B8F5-C6168622A0A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspiRover.Models", "RaspiRover.Models\RaspiRover.Models.csproj", "{FC02E716-1A58-4926-AA85-70014A8A6C75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaspiRover.Server", "RaspiRover.Server\RaspiRover.Server.csproj", "{2B9A86B4-6202-442B-B828-52FE0677C32A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B2083FF-CD0B-4ACF-8160-8D91F47AB1AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B2083FF-CD0B-4ACF-8160-8D91F47AB1AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B2083FF-CD0B-4ACF-8160-8D91F47AB1AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B2083FF-CD0B-4ACF-8160-8D91F47AB1AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{515E9A37-28C1-40EE-B8F5-C6168622A0A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{515E9A37-28C1-40EE-B8F5-C6168622A0A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{515E9A37-28C1-40EE-B8F5-C6168622A0A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{515E9A37-28C1-40EE-B8F5-C6168622A0A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC02E716-1A58-4926-AA85-70014A8A6C75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC02E716-1A58-4926-AA85-70014A8A6C75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC02E716-1A58-4926-AA85-70014A8A6C75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC02E716-1A58-4926-AA85-70014A8A6C75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B9A86B4-6202-442B-B828-52FE0677C32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B9A86B4-6202-442B-B828-52FE0677C32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B9A86B4-6202-442B-B828-52FE0677C32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B9A86B4-6202-442B-B828-52FE0677C32A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
+EndGlobal
