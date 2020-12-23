@@ -40,8 +40,19 @@ namespace PlayGround.Controls
                     return;
                 }
 
-                view._leftBoxView.WidthRequest = 0;
-                view._rightBoxView.WidthRequest = 0;
+                if (oldHeight > 0)
+                {
+                    var animation = new Animation(d => view._rightBoxView.WidthRequest = d, oldHeight, 0, Easing.Linear);
+                    animation.Commit(view._rightBoxView, "AnimateRightBox", 16, 100);
+                }
+
+                if (oldHeight < 0)
+                {
+
+                    var leftAnimation = new Animation(d => view._leftBoxView.WidthRequest = d, oldHeight * -1, 0, Easing.Linear);
+                    leftAnimation.Commit(view._leftBoxView, "AnimateLeftBox", 16, 100);
+                }
+
             }
         }
         public static readonly BindableProperty LeftColorProperty = BindableProperty.Create(nameof(LeftColor), typeof(Color), typeof(SteerSlider), Color.Red, propertyChanged: LeftColorChanged);
@@ -172,8 +183,20 @@ namespace PlayGround.Controls
         {
             if (!IsEnabled)
                 return;
-            if (e.StatusType == GestureStatus.Started)
+            if (e.StatusType == GestureStatus.Completed)
+            {
+                Value = 0;
+                _currentValue = 0;
                 _lastValue = 0;
+                return;
+            }
+
+            if (e.StatusType == GestureStatus.Started)
+            {
+                _lastValue = 0;
+                _currentValue = 0;
+            }
+
             if (e.StatusType != GestureStatus.Running)
                 return;
 

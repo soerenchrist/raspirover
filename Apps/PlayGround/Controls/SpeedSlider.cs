@@ -40,8 +40,17 @@ namespace PlayGround.Controls
                     return;
                 }
 
-                view._negativeBoxView.HeightRequest = 0;
-                view._positiveBoxView.HeightRequest = 0;
+                if (oldHeight > 0)
+                {
+                    var animation = new Animation(d => view._positiveBoxView.HeightRequest = d, oldHeight, 0, Easing.Linear);
+                    animation.Commit(view._positiveBoxView, "AnimatePositiveBox", 16, 100);
+                }
+
+                if (oldHeight < 0)
+                {
+                    var negativeAnimation = new Animation(d => view._negativeBoxView.HeightRequest = d, oldHeight * -1, 0, Easing.Linear);
+                    negativeAnimation.Commit(view._negativeBoxView, "AnimateNegativeBox", 16, 100);
+                }
             }
         }
 
@@ -153,8 +162,16 @@ namespace PlayGround.Controls
         {
             if (!IsEnabled)
                 return;
+            if (e.StatusType == GestureStatus.Completed)
+            {
+                Value = 0;
+            }
             if (e.StatusType == GestureStatus.Started)
+            {
                 _lastValue = 0;
+                _currentValue = 0;
+            }
+
             if (e.StatusType != GestureStatus.Running)
                 return;
 
