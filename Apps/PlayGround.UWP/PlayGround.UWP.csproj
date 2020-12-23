@@ -197,8 +197,11 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.10</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Connectivity">
+      <Version>6.1.1</Version>
+    </PackageReference>
     <PackageReference Include="Plugin.BLE">
-      <Version>2.1.1</Version>
+      <Version>2.2.0-pre2</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.Events.XamForms">
       <Version>12.1.5</Version>

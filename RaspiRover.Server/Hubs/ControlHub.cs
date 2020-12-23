@@ -56,6 +56,7 @@ namespace RaspiRover.Server.Hubs
 
         public async Task DeactivateDistanceMeasurement()
         {
+            _logger.LogDebug("Test");
             await Clients.Others.SendAsync("DeactivateDistanceMeasurement");
         }
 

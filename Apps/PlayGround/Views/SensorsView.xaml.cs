@@ -14,11 +14,6 @@ namespace PlayGround.Views
             InitializeComponent();
             this.WhenActivated(disposable =>
             {
-                this.OneWayBind(ViewModel, x => x.Devices, x => x.DeviceList.ItemsSource)
-                    .DisposeWith(disposable);
-                this.OneWayBind(ViewModel, x => x.IsBusy, x => x.ActivityIndicator.IsRunning)
-                    .DisposeWith(disposable);
-
                 this.BindCommand(ViewModel, x => x.BackCommand, x => x.BackButton)
                     .DisposeWith(disposable);
             });

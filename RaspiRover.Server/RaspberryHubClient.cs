@@ -33,36 +33,27 @@ namespace RaspiRover.Server
 
         private void InitializeGpios()
         {
-            if (_configuration.Motors != null)
+            foreach (var motor in _configuration.Motors.Values)
             {
-                foreach (var motor in _configuration.Motors.Values)
-                {
-                    motor.Init();
-                }
-            }
-            if (_configuration.Lights != null)
-            {
-                foreach (var light in _configuration.Lights.Values)
-                {
-                    light.Init();
-                }
-            }
-            if (_configuration.Servos != null)
-            {
-                foreach (var servos in _configuration.Servos.Values)
-                {
-                    servos.Init();
-                }
-            }
-            if (_configuration.DistanceSensors != null)
-            {
-                foreach (var distanceSensor in _configuration.DistanceSensors.Values)
-                {
-                    distanceSensor.Init();
-                }
+                motor.Init();
             }
 
-            if (_configuration.Camera != null && _configuration.Camera.Enabled)
+            foreach (var light in _configuration.Lights.Values)
+            {
+                light.Init();
+            }
+
+            foreach (var servos in _configuration.Servos.Values)
+            {
+                servos.Init();
+            }
+
+            foreach (var distanceSensor in _configuration.DistanceSensors.Values)
+            {
+                distanceSensor.Init();
+            }
+
+            if (_configuration.Camera.Enabled)
             {
                 _camera = new Camera();
             }
@@ -91,10 +82,10 @@ namespace RaspiRover.Server
             _connection.On<int>("SetSpeed", speed =>
             {
                 _logger.LogDebug($"Setting speed to {speed}");
-                if (_configuration.Motors != null && _configuration.Motors.ContainsKey("antrieb"))
+                if (_configuration.Motors.ContainsKey("antrieb"))
                     _configuration.Motors["antrieb"].Speed = speed;
 
-                if (_configuration.Lights != null && _configuration.Lights.ContainsKey("ruecklicht"))
+                if (_configuration.Lights.ContainsKey("ruecklicht"))
                 {
                     _configuration.Lights["ruecklicht"].On = speed < 0;
                 }
@@ -103,7 +94,7 @@ namespace RaspiRover.Server
             _connection.On<int>("SetSteerPosition", i =>
             {
                 _logger.LogDebug($"Setting steer position to {i}");
-                if (_configuration.Servos != null && _configuration.Servos.ContainsKey("lenkung"))
+                if (_configuration.Servos.ContainsKey("lenkung"))
                     _configuration.Servos["lenkung"].Position = i;
             });
 
@@ -135,7 +126,7 @@ namespace RaspiRover.Server
             _connection.On("ActivateDistanceMeasurement", () =>
             {
                 _logger.LogDebug("Activating distance measurements");
-                if (_configuration.DistanceSensors != null && _configuration.DistanceSensors.ContainsKey("front"))
+                if (_configuration.DistanceSensors.ContainsKey("front"))
                     _distanceDisposable = _configuration.DistanceSensors["front"]
                         .SubscribeToDistances()
                         .Subscribe(distance =>

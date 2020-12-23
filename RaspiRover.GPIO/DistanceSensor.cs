@@ -1,6 +1,8 @@
 ﻿using RaspiRover.GPIO.Contracts;
 using System;
+using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Threading;
 using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Abstractions;
 
@@ -33,25 +35,31 @@ namespace RaspiRover.GPIO
 
         private double MeasureDistance(IGpioPin triggerPin, IGpioPin echoPin)
         {
-            triggerPin.Write(true);
-            Pi.Timing.SleepMicroseconds(10);
-            triggerPin.Write(false);
+            ManualResetEvent mre = new ManualResetEvent(false);
+            mre.WaitOne(500);
+            Stopwatch pulseLength = new Stopwatch();
 
-            var startTime = DateTime.Now;
-            var stopTime = DateTime.Now;
-            while (echoPin.Value == false)
+            //Send pulse
+            triggerPin.Write(GpioPinValue.High);
+            mre.WaitOne(TimeSpan.FromMilliseconds(0.01));
+            triggerPin.Write(GpioPinValue.Low);
+
+            //Recieve pusle
+            while (echoPin.Read() == false)
             {
-                startTime = DateTime.Now;
             }
+            pulseLength.Start();
 
-            while (echoPin.Value)
+
+            while (echoPin.Read())
             {
-                stopTime = DateTime.Now;
             }
+            pulseLength.Stop();
 
-            var timeElapsed = stopTime - startTime;
-            const int speedOfSoundInCmProS = 34300;
-            var distance = (timeElapsed.TotalSeconds * speedOfSoundInCmProS) / 2;
+            //Calculating distance
+            TimeSpan timeBetween = pulseLength.Elapsed;
+            Debug.WriteLine(timeBetween.ToString());
+            double distance = timeBetween.TotalSeconds * 17000;
 
             return distance;
         }

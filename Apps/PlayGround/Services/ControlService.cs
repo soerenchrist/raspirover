@@ -145,7 +145,10 @@ namespace PlayGround.Services
                     observer.OnNext(distance);
                 });
 
-                return Disposable.Create(() => _connection.SendAsync("DeactivateDistanceMeasurement"));
+                return Disposable.Create(() =>
+                {
+                    _connection.SendAsync("DeactivateDistanceMeasurement");
+                });
             });
         }
     }

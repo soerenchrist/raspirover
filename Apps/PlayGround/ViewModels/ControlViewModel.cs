@@ -121,6 +121,7 @@ namespace PlayGround.ViewModels
                 }).Subscribe();
 
             _distance = this.GetIsActivated()
+                .Delay(TimeSpan.FromSeconds(5))
                 .Select(x => x ? ControlService.Current.MeasureDistance() : Observable.Return(0.0))
                 .Switch()
                 .Do(Console.WriteLine)

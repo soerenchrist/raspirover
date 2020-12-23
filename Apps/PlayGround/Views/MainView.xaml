@@ -40,6 +40,9 @@
                 <Button Text="Kalibrieren"
                         VerticalOptions="Center"
                         x:Name="CalibrateButton"/>
+                <Button Text="Sensoren"
+                        VerticalOptions="Center"
+                        x:Name="SensorsButton"/>
 
                 <Button Text="Einstellungen"
                         VerticalOptions="Center"
