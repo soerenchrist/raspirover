@@ -26,4 +26,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\RaspiRover.Communication\RaspiRover.Communication.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\ControlView.xaml.cs">
+      <DependentUpon>ControlView.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

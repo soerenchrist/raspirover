@@ -10,9 +10,8 @@ namespace PlayGround
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute("gyro", typeof(RotationView));
             Routing.RegisterRoute("calibrate", typeof(CalibrateView));
-            Routing.RegisterRoute("manual", typeof(ManualView));
+            Routing.RegisterRoute("control", typeof(ControlView));
             Routing.RegisterRoute("settings", typeof(SettingsView));
         }
     }

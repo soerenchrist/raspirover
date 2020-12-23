@@ -9,11 +9,11 @@ using Xamarin.Forms.Xaml;
 namespace PlayGround.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ManualView
+    public partial class ControlView
     {
-        public ManualView()
+        public ControlView()
         {
-            ViewModel = new ManualViewModel();
+            ViewModel = new ControlViewModel();
             InitializeComponent();
             this.WhenActivated(disposable =>
             {
@@ -28,7 +28,7 @@ namespace PlayGround.Views
                         connected => connected ? Color.Green : Color.Red)
                     .DisposeWith(disposable);
 
-                this.WhenAnyValue(x => x.ViewModel.Image)
+                this.WhenAnyValue(x => x.ViewModel!.Image)
                     .Where(x => x != null)
                     .Select(x => ImageSource.FromStream(() => new MemoryStream(x)))
                     .BindTo(this, x => x.TakenImage.Source)
@@ -36,6 +36,11 @@ namespace PlayGround.Views
                 this.BindCommand(ViewModel, x => x.TakeImageCommand, x => x.TakeImageButton)
                     .DisposeWith(disposable);
                 this.BindCommand(ViewModel, x => x.VideoCommand, x => x.VideoButton)
+                    .DisposeWith(disposable);
+
+                this.OneWayBind(ViewModel, x => x.GyroMode, x => x.SpeedSlider.IsEnabled, x => !x)
+                    .DisposeWith(disposable);
+                this.OneWayBind(ViewModel, x => x.GyroMode, x => x.SteerSlider.IsEnabled, x => !x)
                     .DisposeWith(disposable);
 
                 this.OneWayBind(ViewModel, x => x.VideoRunning, x => x.VideoButton.Text,

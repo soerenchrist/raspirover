@@ -48,9 +48,8 @@ namespace PlayGround.Services
                 await _connection.StartAsync();
                 _connectedSubject.OnNext(true);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                Console.WriteLine(exception);
                 _connectedSubject.OnNext(false);
             }
         }

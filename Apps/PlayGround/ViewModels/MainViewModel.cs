@@ -23,7 +23,7 @@ namespace PlayGround.ViewModels
             IsGyroControl = Preferences.Get(PreferenceKeys.IsGyro, true);
             StartRoverCommand = ReactiveCommand.CreateFromTask(() =>
                 IsGyroControl
-                    ? Shell.Current.GoToAsync("gyro")
+                    ? Shell.Current.GoToAsync("manual")
                     : Shell.Current.GoToAsync("manual"));
             StartCalibrationCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("calibrate"));
             StartSettingsCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("settings"));
