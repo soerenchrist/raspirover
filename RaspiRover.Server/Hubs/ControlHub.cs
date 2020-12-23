@@ -22,9 +22,14 @@ namespace RaspiRover.Server.Hubs
             await Clients.Others.SendAsync("ControlSteer", position);
         }
 
+        public async Task StartVideo(int milliseconds)
+        {
+            await Clients.Others.SendAsync("StartVideo", milliseconds);
+        }
+
         public async Task StartVideo()
         {
-            await Clients.Others.SendAsync("StartVideo");
+            await Clients.Others.SendAsync("StartVideo", 500);
         }
 
         public async Task StopVideo()

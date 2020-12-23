@@ -2,6 +2,7 @@
 {
     public static class PreferenceKeys
     {
+        public const string VideoFrameRate = "VideoFrameRate";
         public const string FullSpeed = "FullSpeed";
         public const string Right = "Right";
         public const string Left = "Left";

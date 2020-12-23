@@ -12,5 +12,10 @@
         <Label Text="Server-Adresse" />
         <Entry Placeholder="Server-Adress"
                x:Name="ServerEntry"></Entry>
+
+        <Label Text="Video Framerate" />
+        <Entry Placeholder="Framerate"
+               x:Name="FrameRateEntry"
+               Keyboard="Numeric"/>
     </StackLayout>
 </xamForms:ReactiveContentPage>

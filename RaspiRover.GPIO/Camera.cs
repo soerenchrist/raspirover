@@ -23,9 +23,9 @@ namespace RaspiRover.GPIO
             return image;
         }
 
-        public IObservable<byte[]> StartVideoStream()
+        public IObservable<byte[]> StartVideoStream(TimeSpan interval)
         {
-            return Observable.Interval(TimeSpan.FromSeconds(.5))
+            return Observable.Interval(interval)
                 .Select(x => Pi.Camera.CaptureImage(new CameraStillSettings
                 {
                     CaptureWidth = 320,

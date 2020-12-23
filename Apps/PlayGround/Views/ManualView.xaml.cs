@@ -17,6 +17,8 @@ namespace PlayGround.Views
             InitializeComponent();
             this.WhenActivated(disposable =>
             {
+                if (ViewModel == null)
+                    return;
                 this.Bind(ViewModel, x => x.Speed, x => x.SpeedSlider.Value)
                     .DisposeWith(disposable);
                 this.Bind(ViewModel, x => x.Position, x => x.SteerSlider.Value)

@@ -91,7 +91,8 @@ namespace PlayGround.Services
                 return;
             try
             {
-                await _connection.SendAsync("StartVideo");
+                int interval = Preferences.Get(PreferenceKeys.VideoFrameRate, 500);
+                await _connection.SendAsync("StartVideo", interval);
             }
             catch (Exception) { }
         }

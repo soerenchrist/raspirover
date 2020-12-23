@@ -58,10 +58,10 @@ namespace RaspiRover.Server
                 await _connection.SendAsync("ImageTaken", image);
             });
 
-            _connection.On("StartVideo", () =>
+            _connection.On<int>("StartVideo", (interval) =>
             {
                 Console.WriteLine("Start video");
-                _cameraDisposable = CompositionRoot.Camera.StartVideoStream()
+                _cameraDisposable = CompositionRoot.Camera.StartVideoStream(TimeSpan.FromMilliseconds(interval))
                     .Do(x => _connection.SendAsync("ImageTaken", x))
                     .Subscribe();
             });

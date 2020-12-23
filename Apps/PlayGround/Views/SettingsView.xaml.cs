@@ -1,6 +1,6 @@
-﻿using System.Reactive.Disposables;
-using PlayGround.ViewModels;
+﻿using PlayGround.ViewModels;
 using ReactiveUI;
+using System.Reactive.Disposables;
 using Xamarin.Forms.Xaml;
 
 namespace PlayGround.Views
@@ -15,6 +15,8 @@ namespace PlayGround.Views
             this.WhenActivated(disposable =>
             {
                 this.Bind(ViewModel, x => x.ServerAdress, x => x.ServerEntry.Text)
+                    .DisposeWith(disposable);
+                this.Bind(ViewModel, x => x.VideoFrameRateString, x => x.FrameRateEntry.Text)
                     .DisposeWith(disposable);
             });
         }
