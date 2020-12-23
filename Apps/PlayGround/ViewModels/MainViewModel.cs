@@ -45,7 +45,6 @@ namespace PlayGround.ViewModels
                 return true;
             }).ToProperty(this, x => x.IsGyroSupported);
 
-
             IsGyroControl = Preferences.Get(PreferenceKeys.IsGyro, true);
             StartRoverCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("control"));
             SensorsCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("sensors"));

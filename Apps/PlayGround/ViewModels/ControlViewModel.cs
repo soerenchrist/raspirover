@@ -4,6 +4,7 @@ using ReactiveUI;
 using System;
 using System.Numerics;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -136,6 +137,82 @@ namespace PlayGround.ViewModels
                 .Select(active => active ? ControlService.Current.LastImage : Observable.Return<byte[]?>(null))
                 .Switch()
                 .ToProperty(this, x => x.Image);
+
+            this.WhenActivated(disposable =>
+            {
+                KeyManager.Current.ObserveKeyPress("Up")
+                    .Select(keydown => keydown
+                        ? Observable.Interval(TimeSpan.FromMilliseconds(20)).Select(_ => true)
+                        : Observable.Return(false))
+                    .Switch()
+                    .ObserveOn(RxApp.MainThreadScheduler)
+                    .Do(down =>
+                        {
+                            if (down)
+                            {
+                                var newSpeed = Speed + 3;
+                                Speed = Math.Min(newSpeed, 100);
+                            }
+                            else
+                                Speed = 0;
+                        })
+                    .Subscribe()
+                    .DisposeWith(disposable);
+                KeyManager.Current.ObserveKeyPress("Down")
+                    .Select(keydown => keydown
+                        ? Observable.Interval(TimeSpan.FromMilliseconds(20)).Select(_ => true)
+                        : Observable.Return(false))
+                    .Switch()
+                    .ObserveOn(RxApp.MainThreadScheduler)
+                    .Do(down =>
+                    {
+                        if (down)
+                        {
+                            var newSpeed = Speed - 3;
+                            Speed = Math.Max(newSpeed, -100);
+                        }
+                        else
+                            Speed = 0;
+                    })
+                    .Subscribe()
+                    .DisposeWith(disposable);
+                KeyManager.Current.ObserveKeyPress("Left")
+                    .Select(keydown => keydown
+                        ? Observable.Interval(TimeSpan.FromMilliseconds(20)).Select(_ => true)
+                        : Observable.Return(false))
+                    .Switch()
+                    .ObserveOn(RxApp.MainThreadScheduler)
+                    .Do(down =>
+                    {
+                        if (down)
+                        {
+                            var newPosition = Position - 3;
+                            Position = Math.Max(newPosition, -100);
+                        }
+                        else
+                            Position = 0;
+                    })
+                    .Subscribe()
+                    .DisposeWith(disposable);
+                KeyManager.Current.ObserveKeyPress("Right")
+                    .Select(keydown => keydown
+                        ? Observable.Interval(TimeSpan.FromMilliseconds(20)).Select(_ => true)
+                        : Observable.Return(false))
+                    .Switch()
+                    .ObserveOn(RxApp.MainThreadScheduler)
+                    .Do(down =>
+                    {
+                        if (down)
+                        {
+                            var newPosition = Position + 3;
+                            Position = Math.Min(newPosition, 100);
+                        }
+                        else
+                            Position = 0;
+                    })
+                    .Subscribe()
+                    .DisposeWith(disposable);
+            });
 
         }
 

@@ -106,7 +106,7 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Plugin.BLE" Version="2.2.0-pre2" />
+    <PackageReference Include="Plugin.BLE" Version="2.1.1" />
     <PackageReference Include="ReactiveUI.Events.XamForms">
       <Version>12.1.5</Version>
     </PackageReference>

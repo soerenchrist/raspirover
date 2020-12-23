@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlayGround.Services;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -19,6 +20,7 @@ namespace PlayGround.UWP
         public App()
         {
             this.InitializeComponent();
+
             this.Suspending += OnSuspending;
         }
 
@@ -30,6 +32,7 @@ namespace PlayGround.UWP
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
+
             Xamarin.Forms.Forms.SetFlags("Shell_UWP_Experimental");
             // App-Initialisierung nicht wiederholen, wenn das Fenster bereits Inhalte enthält.
             // Nur sicherstellen, dass das Fenster aktiv ist.
@@ -37,7 +40,14 @@ namespace PlayGround.UWP
             {
                 // Frame erstellen, der als Navigationskontext fungiert und zum Parameter der ersten Seite navigieren
                 rootFrame = new Frame();
-
+                rootFrame.KeyDown += (sender, args) =>
+                {
+                    KeyManager.Current.SendKeyDownEvent(args.Key.ToString());
+                };
+                rootFrame.KeyUp += (sender, args) =>
+                {
+                    KeyManager.Current.SendKeyUpEvent(args.Key.ToString());
+                };
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 Xamarin.Forms.Forms.Init(e);
 

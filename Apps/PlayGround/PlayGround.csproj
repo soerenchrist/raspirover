@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.1" />
-    <PackageReference Include="Plugin.BLE" Version="2.2.0-pre2" />
+    <PackageReference Include="Plugin.BLE" Version="2.1.1" />
     <PackageReference Include="ReactiveUI" Version="12.1.5" />
     <PackageReference Include="ReactiveUI.Events.XamForms" Version="12.1.5" />
     <PackageReference Include="ReactiveUI.XamForms" Version="12.1.5" />
