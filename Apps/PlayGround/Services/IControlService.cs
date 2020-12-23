@@ -15,5 +15,6 @@ namespace PlayGround.Services
         Task TakeImage();
         Task StartVideo();
         Task StopVideo();
+        IObservable<double> MeasureDistance();
     }
 }

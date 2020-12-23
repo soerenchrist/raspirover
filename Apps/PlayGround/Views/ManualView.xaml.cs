@@ -41,6 +41,9 @@ namespace PlayGround.Views
                 this.OneWayBind(ViewModel, x => x.VideoRunning, x => x.VideoButton.Text,
                         x => x ? "Stop" : "Video")
                     .DisposeWith(disposable);
+
+                this.OneWayBind(ViewModel, x => x.Distance, x => x.DistanceIndicator.Distance)
+                    .DisposeWith(disposable);
             });
         }
     }

@@ -15,19 +15,28 @@ namespace PlayGround.Controls
                 var height = view.Height / 2;
                 var percentage = (double)newvalue;
                 var realHeight = height * percentage / 100;
+                var oldPercentage = (double)oldvalue;
+                var oldHeight = height * oldPercentage / 100;
 
                 view._label.Text = ((int)percentage).ToString();
 
                 if (realHeight > 0)
                 {
-                    view._rightBoxView.WidthRequest = realHeight;
-                    view._leftBoxView.WidthRequest = 0;
+                    var animation = new Animation(d => view._rightBoxView.WidthRequest = d, oldHeight > 0 ? oldHeight : 0, realHeight, Easing.Linear);
+                    animation.Commit(view._rightBoxView, "AnimateRightBox", 16, 100);
+
+                    var leftAnimation = new Animation(d => view._leftBoxView.WidthRequest = d, oldHeight < 0 ? oldHeight : 0, 0, Easing.Linear);
+                    leftAnimation.Commit(view._leftBoxView, "AnimateLeftBox", 16, 100);
                     return;
                 }
                 if (realHeight < 0)
                 {
-                    view._leftBoxView.WidthRequest = realHeight * -1;
-                    view._rightBoxView.WidthRequest = 0;
+
+                    var animation = new Animation(d => view._rightBoxView.WidthRequest = d, oldHeight > 0 ? oldHeight : 0, 0, Easing.Linear);
+                    animation.Commit(view._rightBoxView, "AnimateRightBox", 16, 100);
+
+                    var leftAnimation = new Animation(d => view._leftBoxView.WidthRequest = d, oldHeight < 0 ? oldHeight * -1 : 0, realHeight * -1, Easing.Linear);
+                    leftAnimation.Commit(view._leftBoxView, "AnimateLeftBox", 16, 100);
                     return;
                 }
 
@@ -108,7 +117,7 @@ namespace PlayGround.Controls
             var panGestureRecognizer = new PanGestureRecognizer();
             panGestureRecognizer.PanUpdated += PanGestureRecognizerOnPanUpdated;
             GestureRecognizers.Add(panGestureRecognizer);
-
+            ColumnSpacing = 0;
             ColumnDefinitions.Add(new ColumnDefinition
             {
                 Width = GridLength.Star

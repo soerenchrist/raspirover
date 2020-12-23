@@ -11,6 +11,8 @@ namespace PlayGround.ViewModels
     {
         private readonly ObservableAsPropertyHelper<bool> _connected;
         public bool Connected => _connected.Value;
+        private readonly ObservableAsPropertyHelper<double> _distance;
+        public double Distance => _distance.Value;
 
         private readonly ObservableAsPropertyHelper<byte[]?> _image;
         public byte[]? Image => _image.Value;
@@ -63,6 +65,12 @@ namespace PlayGround.ViewModels
                     else
                         ControlService.Current.Disconnect();
                 }).Subscribe();
+
+            _distance = this.GetIsActivated()
+                .Select(x => x ? ControlService.Current.MeasureDistance() : Observable.Return(0.0))
+                .Switch()
+                .Do(Console.WriteLine)
+                .ToProperty(this, x => x.Distance, scheduler: RxApp.MainThreadScheduler);
 
             _connected = this.GetIsActivated()
                 .Select(x => x ? ControlService.Current.Connected : Observable.Return(false))

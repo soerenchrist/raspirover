@@ -2,6 +2,7 @@
 using PlayGround.Util;
 using RaspiRover.Communication;
 using System;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
@@ -131,6 +132,23 @@ namespace PlayGround.Services
             catch (Exception)
             {
             }
+        }
+
+        public IObservable<double> MeasureDistance()
+        {
+            if (_connection == null || _connection.State != HubConnectionState.Connected)
+                return Observable.Return(0.0);
+
+            return Observable.Create<double>(observer =>
+            {
+                _connection.SendAsync(Methods.ActivateDistanceMeasurement);
+                _connection.On<double>(Methods.DistanceMeasured, distance =>
+                {
+                    observer.OnNext(distance);
+                });
+
+                return Disposable.Create(() => _connection.SendAsync(Methods.DeactivateDistanceMeasurement));
+            });
         }
     }
 }

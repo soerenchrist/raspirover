@@ -9,21 +9,21 @@
                               x:Class="PlayGround.Views.ManualView"
                               Shell.NavBarIsVisible="False">
     <Grid ColumnDefinitions="*,*"
-          RowDefinitions="50, *">
+          RowDefinitions="50,40, *">
         <controls:SpeedSlider
             x:Name="SpeedSlider"
-            Grid.Row="1"
+            Grid.Row="2"
             NegativeColor="{StaticResource AccentColor2}"
             PositiveColor="{StaticResource AccentColor}"
             Grid.Column="0" />
         <controls:SteerSlider
             x:Name="SteerSlider"
-            Grid.Row="1"
+            Grid.Row="2"
             RightColor="{StaticResource AccentColor}"
             LeftColor="{StaticResource AccentColor2}"
             Grid.Column="1" />
         <BoxView WidthRequest="4"
-                 Grid.Row="1"
+                 Grid.Row="2"
                  BackgroundColor="#eeeeee"
                  Grid.Column="0"
                  Grid.ColumnSpan="2"
@@ -62,5 +62,12 @@
             <Button x:Name="VideoButton"
                     Text="Video"/>
         </StackLayout>
+
+        <controls:DistanceIndicator MaxValue="400"
+                                    x:Name="DistanceIndicator"
+                                    Grid.Row="1"
+                                    IndicatorColor="{StaticResource AccentColor}"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"/>
     </Grid>
 </xamForms:ReactiveContentPage>
