@@ -13,39 +13,41 @@ namespace PlayGround.ViewModels
     {
         private readonly ObservableAsPropertyHelper<bool> _connected;
         public bool Connected => _connected.Value;
+
         private readonly ObservableAsPropertyHelper<double> _distance;
         public double Distance => _distance.Value;
 
         private readonly ObservableAsPropertyHelper<byte[]?> _image;
+        public byte[]? Image => _image.Value;
+
         private readonly ObservableAsPropertyHelper<Vector3> _orientation;
-        public Vector3 Orientation => _orientation.Value;
+        private Vector3 Orientation => _orientation.Value;
         private bool _gyroMode;
         public bool GyroMode {
             get => _gyroMode;
-            set => this.RaiseAndSetIfChanged(ref _gyroMode, value);
+            private set => this.RaiseAndSetIfChanged(ref _gyroMode, value);
         }
 
-        public byte[]? Image => _image.Value;
         private int _speed;
         public int Speed {
             get => _speed;
-            set => this.RaiseAndSetIfChanged(ref _speed, value);
+            private set => this.RaiseAndSetIfChanged(ref _speed, value);
         }
 
         private int _position;
         public int Position {
             get => _position;
-            set => this.RaiseAndSetIfChanged(ref _position, value);
+            private set => this.RaiseAndSetIfChanged(ref _position, value);
         }
-
-        public ReactiveCommand<Unit, Unit> TakeImageCommand { get; }
-        public ReactiveCommand<Unit, Unit> VideoCommand { get; }
 
         private bool _videoRunning;
         public bool VideoRunning {
             get => _videoRunning;
-            set => this.RaiseAndSetIfChanged(ref _videoRunning, value);
+            private set => this.RaiseAndSetIfChanged(ref _videoRunning, value);
         }
+
+        public ReactiveCommand<Unit, Unit> TakeImageCommand { get; }
+        public ReactiveCommand<Unit, Unit> VideoCommand { get; }
 
         private readonly float _fullSpeedZ;
         private readonly float _backSpeedZ;
@@ -91,7 +93,6 @@ namespace PlayGround.ViewModels
                     .Do(x => Position = x)
                     .Subscribe();
             }
-
 
             this.WhenAnyValue(x => x.Speed)
                 .Do(async x => await ControlService.Current.SetSpeed(x))

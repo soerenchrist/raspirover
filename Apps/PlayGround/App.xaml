@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
              x:Class="PlayGround.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -18,6 +17,7 @@
             <Style TargetType="Button">
                 <Setter Property="BackgroundColor" Value="{StaticResource LighterBackgroundColor}"/>
                 <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+                <Setter Property="CornerRadius" Value="8"/>
             </Style>
             <Style TargetType="Entry">
                 <Setter Property="TextColor" Value="{StaticResource TextColor}" />

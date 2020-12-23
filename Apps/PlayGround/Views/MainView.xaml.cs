@@ -29,6 +29,11 @@ namespace PlayGround.Views
                 this.OneWayBind(ViewModel, x => x.IsGyroControl, x => x.TouchControlButton.BackgroundColor,
                     isGyro => isGyro ? backgroundColor : accentColor);
 
+                this.OneWayBind(ViewModel, x => x.IsGyroSupported, x => x.GyroControlButton.IsVisible)
+                    .DisposeWith(disposable);
+                this.OneWayBind(ViewModel, x => x.IsGyroSupported, x => x.TouchControlButton.IsVisible)
+                    .DisposeWith(disposable);
+
                 this.BindCommand(ViewModel, x => x.SetControlCommand, x => x.GyroControlButton,
                     Observable.Return(true));
                 this.BindCommand(ViewModel, x => x.SetControlCommand, x => x.TouchControlButton,
