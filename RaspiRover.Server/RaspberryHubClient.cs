@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using RaspiRover.Communication;
 using System;
 using System.Net.Http;
 using System.Reactive.Linq;
@@ -10,17 +12,24 @@ namespace RaspiRover.Server
 {
     public class RaspberryHubClient : IHostedService
     {
+        private readonly ILogger<RaspberryHubClient> _logger;
+        private readonly CompositionRoot _compositionRoot;
         private HubConnection? _connection;
         private IDisposable? _cameraDisposable;
+        private IDisposable? _distanceDisposable;
 
-        public RaspberryHubClient(IHostApplicationLifetime lifetime)
+        public RaspberryHubClient(IHostApplicationLifetime lifetime,
+            ILogger<RaspberryHubClient> logger,
+            CompositionRoot compositionRoot)
         {
+            _logger = logger;
+            _compositionRoot = compositionRoot;
             lifetime.ApplicationStarted.Register(StartConnection);
         }
 
         private async void StartConnection()
         {
-            Console.WriteLine("Connecting raspberry to signalr hub");
+            _logger.LogInformation("Start connecting Raspberry Pi client to SignalR");
 
             _connection = new HubConnectionBuilder()
                 .WithUrl("http://localhost:5000/control", opts =>
@@ -31,45 +40,62 @@ namespace RaspiRover.Server
                         if (message is HttpClientHandler clientHandler)
                             // bypass SSL certificate
                             clientHandler.ServerCertificateCustomValidationCallback +=
-                            (sender, certificate, chain, sslPolicyErrors) => true;
+                            (_, _, _, _) => true;
                         return message;
                     };
 
                 })
                 .Build();
 
-            _connection.On<int>("ControlSpeed", i =>
+            _connection.On<int>(Methods.SetSpeed, i =>
             {
-                Console.WriteLine($"Set speed to {i}");
-                CompositionRoot.DriveMotor.Speed = i;
-                CompositionRoot.BackLight.On = i < 0;
+                _logger.LogDebug($"Setting speed to {i}");
+                _compositionRoot.DriveMotor.Speed = i;
+                _compositionRoot.BackLight.On = i < 0;
             });
 
-            _connection.On<int>("ControlSteer", i =>
+            _connection.On<int>(Methods.SetSteerPosition, i =>
             {
-                Console.WriteLine($"Set steer to {i}");
-                CompositionRoot.SteerMotor.Position = i;
+                _logger.LogDebug($"Setting steer position to {i}");
+                _compositionRoot.SteerMotor.Position = i;
             });
 
-            _connection.On("TakeImage", async () =>
+            _connection.On(Methods.TakeImage, async () =>
             {
-                Console.WriteLine("Requested to take picture");
-                var image = await CompositionRoot.Camera.TakeImage();
+                _logger.LogDebug("Requested to take a picture");
+                var image = await _compositionRoot.Camera.TakeImage();
                 await _connection.SendAsync("ImageTaken", image);
             });
 
-            _connection.On<int>("StartVideo", (interval) =>
+            _connection.On<int>(Methods.StartVideo, (interval) =>
             {
-                Console.WriteLine("Start video");
-                _cameraDisposable = CompositionRoot.Camera.StartVideoStream(TimeSpan.FromMilliseconds(interval))
-                    .Do(x => _connection.SendAsync("ImageTaken", x))
+                _logger.LogDebug("Requested to start video streaming");
+                _cameraDisposable = _compositionRoot.Camera.StartVideoStream(TimeSpan.FromMilliseconds(interval))
+                    .Do(x => _connection.SendAsync(Methods.ImageTaken, x))
                     .Subscribe();
             });
 
-            _connection.On("StopVideo", () =>
+            _connection.On(Methods.StopVideo, () =>
             {
-                Console.WriteLine("Stop video");
+                _logger.LogDebug($"Requested to stop video streaming");
                 _cameraDisposable?.Dispose();
+            });
+
+            _connection.On(Methods.ActivateDistanceMeasurement, () =>
+            {
+                _logger.LogDebug("Activating distance measurements");
+                _distanceDisposable = _compositionRoot.NearbySensor.SubscribeToDistances()
+                    .Subscribe(distance =>
+                    {
+                        _logger.LogDebug($"Measured distance of {Math.Round(distance)}cm");
+                        _connection.SendAsync(Methods.DistanceMeasured, distance);
+                    });
+            });
+
+            _connection.On(Methods.DeactivateDistanceMeasurement, () =>
+            {
+                _logger.LogDebug("Deactivating distance measurement");
+                _distanceDisposable?.Dispose();
             });
 
             await _connection.StartAsync();
@@ -82,6 +108,7 @@ namespace RaspiRover.Server
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Stopping Raspberry pi client");
             _connection?.StopAsync(cancellationToken);
             _cameraDisposable?.Dispose();
             return Task.CompletedTask;

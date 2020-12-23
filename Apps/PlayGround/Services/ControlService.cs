@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using PlayGround.Util;
+using RaspiRover.Communication;
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -36,7 +37,7 @@ namespace PlayGround.Services
             _connection.Closed += ConnectionOnClosed;
             _connection.Reconnected += ConnectionOnReconnected;
 
-            _connection.On<byte[]>("ImageTaken", image =>
+            _connection.On<byte[]>(Methods.ImageTaken, image =>
             {
                 _imageSubject.OnNext(image);
             });
@@ -80,7 +81,7 @@ namespace PlayGround.Services
                 return;
             try
             {
-                await _connection.SendAsync("TakeImage");
+                await _connection.SendAsync(Methods.TakeImage);
             }
             catch (Exception) { }
         }
@@ -92,7 +93,7 @@ namespace PlayGround.Services
             try
             {
                 int interval = Preferences.Get(PreferenceKeys.VideoFrameRate, 500);
-                await _connection.SendAsync("StartVideo", interval);
+                await _connection.SendAsync(Methods.StartVideo, interval);
             }
             catch (Exception) { }
         }
@@ -103,7 +104,7 @@ namespace PlayGround.Services
                 return;
             try
             {
-                await _connection.SendAsync("StopVideo");
+                await _connection.SendAsync(Methods.StopVideo);
             }
             catch (Exception) { }
         }
@@ -114,7 +115,7 @@ namespace PlayGround.Services
                 return;
             try
             {
-                await _connection.SendAsync("SetSpeed", speed);
+                await _connection.SendAsync(Methods.SetSpeed, speed);
             }
             catch (Exception) { }
         }
@@ -125,7 +126,7 @@ namespace PlayGround.Services
                 return;
             try
             {
-                await _connection.SendAsync("SetSteerPosition", steerPosition);
+                await _connection.SendAsync(Methods.SetSteerPosition, steerPosition);
             }
             catch (Exception)
             {

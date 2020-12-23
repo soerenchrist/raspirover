@@ -29,6 +29,7 @@ namespace RaspiRover.Server
                 o.EnableDetailedErrors = true;
                 o.MaximumReceiveMessageSize = 102400;
             });
+            services.AddSingleton<CompositionRoot>();
             services.AddControllers();
             services.AddHostedService<RaspberryHubClient>();
         }
