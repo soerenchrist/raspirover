@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using RaspiRover.Communication;
 using System.Threading.Tasks;
 
 namespace RaspiRover.Server.Hubs
 {
     public class ControlHub : Hub
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<ControlHub> _logger;
 
-        public ControlHub(ILogger logger)
+        public ControlHub(ILogger<ControlHub> logger)
         {
             _logger = logger;
         }
@@ -22,53 +21,47 @@ namespace RaspiRover.Server.Hubs
 
         public async Task SetSpeed(int speed)
         {
-            await Clients.Others.SendAsync(Methods.SetSpeed, speed);
+            await Clients.Others.SendAsync("SetSpeed", speed);
         }
 
         public async Task SetSteerPosition(double position)
         {
-            await Clients.Others.SendAsync(Methods.SetSteerPosition, position);
+            await Clients.Others.SendAsync("SetSteerPosition", position);
         }
 
         public async Task StartVideo(int milliseconds)
         {
-            await Clients.Others.SendAsync(Methods.StartVideo, milliseconds);
+            await Clients.Others.SendAsync("StartVideo", milliseconds);
         }
-
-        public async Task StartVideo()
-        {
-            await Clients.Others.SendAsync(Methods.StartVideo, 500);
-        }
-
         public async Task StopVideo()
         {
-            await Clients.Others.SendAsync(Methods.StopVideo);
+            await Clients.Others.SendAsync("StopVideo");
         }
 
         public async Task TakeImage()
         {
-            await Clients.Others.SendAsync(Methods.TakeImage);
+            await Clients.Others.SendAsync("TakeImage");
         }
 
         public async Task ImageTaken(byte[] image)
         {
-            await Clients.Others.SendAsync(Methods.ImageTaken, image);
+            await Clients.Others.SendAsync("ImageTaken", image);
         }
 
         public async Task ActivateDistanceMeasurement()
         {
-            await Clients.Others.SendAsync(Methods.ActivateDistanceMeasurement);
+            await Clients.Others.SendAsync("ActivateDistanceMeasurement");
         }
 
 
         public async Task DeactivateDistanceMeasurement()
         {
-            await Clients.Others.SendAsync(Methods.DeactivateDistanceMeasurement);
+            await Clients.Others.SendAsync("DeactivateDistanceMeasurement");
         }
 
         public async Task DistanceMeasured(double distance)
         {
-            await Clients.Others.SendAsync(Methods.DistanceMeasured, distance);
+            await Clients.Others.SendAsync("DistanceMeasured", distance);
         }
     }
 }

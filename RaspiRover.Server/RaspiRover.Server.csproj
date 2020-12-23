@@ -22,7 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RaspiRover.Communication\RaspiRover.Communication.csproj" />
       <ProjectReference Include="..\RaspiRover.GPIO\RaspiRover.GPIO.csproj" />
     </ItemGroup>
 

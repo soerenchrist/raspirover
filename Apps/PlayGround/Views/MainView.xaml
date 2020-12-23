@@ -8,7 +8,7 @@
                               x:Class="PlayGround.Views.MainView"
                               Shell.NavBarIsVisible="False">
     <ContentPage.Content>
-        <Grid RowDefinitions="40,*,*,*"
+        <Grid RowDefinitions="40,*"
               ColumnDefinitions="*,*"
               ColumnSpacing="0"
               Padding="20,40">
@@ -26,22 +26,26 @@
                     x:Name="TouchControlButton"
                     Grid.Column="1"/>
 
-            <Button Text="Rover starten"
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    VerticalOptions="Center"
-                    x:Name="StartRoverButton"/>
+            <StackLayout VerticalOptions="Center"
+                         HorizontalOptions="FillAndExpand"
+                         Grid.ColumnSpan="2"
+                         Grid.Column="0"
+                         Spacing="20"
+                         Grid.Row="1">
 
-            <Button Text="Kalibrieren"
-                    Grid.Row="2"
-                    Grid.ColumnSpan="2"
-                    VerticalOptions="Center"
-                    x:Name="CalibrateButton"/>
-            <Button Text="Einstellungen"
-                    Grid.Row="3"
-                    Grid.ColumnSpan="2"
-                    VerticalOptions="Center"
-                    x:Name="StartSettingsButton"/>
+                <Button Text="Rover starten"
+                        VerticalOptions="Center"
+                        x:Name="StartRoverButton"/>
+
+                <Button Text="Kalibrieren"
+                        VerticalOptions="Center"
+                        x:Name="CalibrateButton"/>
+
+                <Button Text="Einstellungen"
+                        VerticalOptions="Center"
+                        x:Name="StartSettingsButton"/>
+            </StackLayout>
+
         </Grid>
     </ContentPage.Content>
 </xamForms:ReactiveContentPage>
