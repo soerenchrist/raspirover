@@ -24,8 +24,8 @@ namespace PlayGround.Views
                     .DisposeWith(disposable);
                 this.BindCommand(ViewModel, x => x.StartSettingsCommand, x => x.StartSettingsButton)
                     .DisposeWith(disposable);
-                this.BindCommand(ViewModel, x => x.SensorsCommand, x => x.SensorsButton)
-                    .DisposeWith(disposable);
+                //this.BindCommand(ViewModel, x => x.SensorsCommand, x => x.SensorsButton)
+                //    .DisposeWith(disposable);
                 this.OneWayBind(ViewModel, x => x.IsGyroControl, x => x.GyroControlButton.BackgroundColor,
                     isGyro => isGyro ? accentColor : backgroundColor);
                 this.OneWayBind(ViewModel, x => x.IsGyroControl, x => x.TouchControlButton.BackgroundColor,

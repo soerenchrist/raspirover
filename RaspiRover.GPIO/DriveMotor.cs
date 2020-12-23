@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using RaspiRover.GPIO.Contracts;
+﻿using RaspiRover.GPIO.Contracts;
 using System;
 using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Abstractions;
@@ -7,25 +6,20 @@ using Unosquare.WiringPi;
 
 namespace RaspiRover.GPIO
 {
-    public sealed class DriveMotor : IDriveMotor, IDisposable
+    public sealed class DriveMotor : IDriveMotor, IGpioPart
     {
+        public int PinForward { get; init; }
+        public int PinBackward { get; init; }
+
+        private GpioPin? _forwardPwm;
+        private GpioPin? _backwardPwm;
         private int _speed;
-        private readonly int _gpioBackward;
-        private readonly int _gpioForward;
-        private readonly GpioPin _forwardPwm;
-        private readonly GpioPin _backwardPwm;
 
-        public DriveMotor(IConfiguration configuration)
+        public void Init()
         {
-            _gpioForward = configuration.GetValue<int>("GPIO:DriveForward");
-            _gpioBackward = configuration.GetValue<int>("GPIO:DriveBackward");
 
-            if (_gpioBackward == 0 || _gpioForward == 0)
-                throw new ArgumentException("Missing configuration for GPIO:DriveForward or GPIO:DriveBackward");
-
-
-            _forwardPwm = (GpioPin)Pi.Gpio[_gpioForward];
-            _backwardPwm = (GpioPin)Pi.Gpio[_gpioBackward];
+            _forwardPwm = (GpioPin)Pi.Gpio[PinForward];
+            _backwardPwm = (GpioPin)Pi.Gpio[PinBackward];
             _forwardPwm.PinMode = GpioPinDriveMode.Output;
             _backwardPwm.PinMode = GpioPinDriveMode.Output;
             _forwardPwm.StartSoftPwm(0, 100);
@@ -41,6 +35,9 @@ namespace RaspiRover.GPIO
                     value = -100;
 
                 _speed = value;
+
+                if (_forwardPwm == null || _backwardPwm == null)
+                    throw new InvalidOperationException("Call init before setting the speed");
 
                 if (_speed == 0)
                 {
@@ -62,8 +59,8 @@ namespace RaspiRover.GPIO
 
         public void Dispose()
         {
-            _backwardPwm.SoftPwmValue = 0;
-            _forwardPwm.SoftPwmValue = 0;
+            if (_backwardPwm != null) _backwardPwm.SoftPwmValue = 0;
+            if (_forwardPwm != null) _forwardPwm.SoftPwmValue = 0;
         }
     }
 }

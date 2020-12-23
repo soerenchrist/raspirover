@@ -1,7 +1,7 @@
-namespace RaspiRover.GPIO.Contracts
+﻿namespace RaspiRover.GPIO.Contracts
 {
     public interface ISteerMotor
     {
-        double Position { get; set; }
+        double Position { set; }
     }
 }

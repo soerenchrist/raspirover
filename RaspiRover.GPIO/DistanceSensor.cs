@@ -6,15 +6,18 @@ using Unosquare.RaspberryIO.Abstractions;
 
 namespace RaspiRover.GPIO
 {
-    public sealed class NearbySensor : INearbySensor, IDisposable
+    public sealed class DistanceSensor : INearbySensor, IGpioPart
     {
-        private readonly IGpioPin _triggerPin;
-        private readonly IGpioPin _echoPin;
+        public int EchoPin { get; init; }
+        public int TriggerPin { get; init; }
 
-        public NearbySensor(int triggerPin, int echoPin)
+        private IGpioPin? _triggerPin;
+        private IGpioPin? _echoPin;
+
+        public void Init()
         {
-            _triggerPin = Pi.Gpio[triggerPin];
-            _echoPin = Pi.Gpio[echoPin];
+            _triggerPin = Pi.Gpio[TriggerPin];
+            _echoPin = Pi.Gpio[EchoPin];
 
             _triggerPin.PinMode = GpioPinDriveMode.Output;
             _echoPin.PinMode = GpioPinDriveMode.Input;
@@ -22,24 +25,26 @@ namespace RaspiRover.GPIO
 
         public IObservable<double> SubscribeToDistances()
         {
+            if (_echoPin == null || _triggerPin == null)
+                throw new InvalidOperationException("You have to call init before subscribing");
             return Observable.Interval(TimeSpan.FromSeconds(.5))
-                .Select(_ => MeasureDistance());
+                .Select(_ => MeasureDistance(_triggerPin, _echoPin));
         }
 
-        private double MeasureDistance()
+        private double MeasureDistance(IGpioPin triggerPin, IGpioPin echoPin)
         {
-            _triggerPin.Write(true);
+            triggerPin.Write(true);
             Pi.Timing.SleepMicroseconds(10);
-            _triggerPin.Write(false);
+            triggerPin.Write(false);
 
             var startTime = DateTime.Now;
             var stopTime = DateTime.Now;
-            while (_echoPin.Value == false)
+            while (echoPin.Value == false)
             {
                 startTime = DateTime.Now;
             }
 
-            while (_echoPin.Value == true)
+            while (echoPin.Value)
             {
                 stopTime = DateTime.Now;
             }
@@ -53,7 +58,7 @@ namespace RaspiRover.GPIO
 
         public void Dispose()
         {
-            _triggerPin.Write(false);
+            _triggerPin?.Write(false);
         }
     }
 }

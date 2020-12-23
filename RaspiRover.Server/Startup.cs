@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RaspiRover.GPIO.Config;
 using RaspiRover.Server.Hubs;
+using System.IO;
 using Unosquare.RaspberryIO;
 using Unosquare.WiringPi;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace RaspiRover.Server
 {
@@ -23,15 +27,28 @@ namespace RaspiRover.Server
         {
             Pi.Init<BootstrapWiringPi>();
 
+            var roverConfig = ParseConfig();
+            services.AddSingleton(_ => roverConfig);
             services.AddSignalR(o =>
             {
 
                 o.EnableDetailedErrors = true;
                 o.MaximumReceiveMessageSize = 102400;
             });
-            services.AddSingleton<CompositionRoot>();
             services.AddControllers();
             services.AddHostedService<RaspberryHubClient>();
+        }
+
+        private RoverConfiguration ParseConfig()
+        {
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(UnderscoredNamingConvention.Instance)
+                .Build();
+
+            var path = Configuration.GetValue<string>("ConfigurationPath");
+            var content = File.ReadAllText(path);
+
+            return deserializer.Deserialize<RoverConfiguration>(content);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
