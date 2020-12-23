@@ -37,7 +37,8 @@ namespace PlayGround.ViewModels
                 }
                 finally
                 {
-                    Accelerometer.Stop();
+                    if (Accelerometer.IsMonitoring)
+                        Accelerometer.Stop();
                 }
 
                 return true;

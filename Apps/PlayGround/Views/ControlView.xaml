@@ -6,6 +6,7 @@
                               xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
                               xmlns:controls="clr-namespace:PlayGround.Controls;assembly=PlayGround"
                               xmlns:viewModels="clr-namespace:PlayGround.ViewModels;assembly=PlayGround"
+                              xmlns:utility="clr-namespace:Montage.Mobile.Utility;assembly=PlayGround"
                               x:Class="PlayGround.Views.ControlView"
                               Shell.NavBarIsVisible="False">
     <Grid ColumnDefinitions="*,*"
@@ -62,6 +63,16 @@
             <Button x:Name="VideoButton"
                     Text="Video"/>
         </StackLayout>
+
+        <Button x:Name="BackButton"
+                HorizontalOptions="Start"
+                Text="{x:Static utility:IconFont.ArrowLeft}"
+                Grid.Row="0"
+                Grid.Column="0"
+                FontSize="Medium"
+                FontFamily="MaterialIcons"
+                BackgroundColor="{StaticResource BackgroundColor}"
+                />
 
         <controls:DistanceIndicator MaxValue="400"
                                     x:Name="DistanceIndicator"

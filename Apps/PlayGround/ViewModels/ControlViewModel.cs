@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Reactive;
 using System.Reactive.Linq;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace PlayGround.ViewModels
 {
@@ -28,14 +29,14 @@ namespace PlayGround.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _gyroMode, value);
         }
 
-        private int _speed;
-        public int Speed {
+        private double _speed;
+        public double Speed {
             get => _speed;
             private set => this.RaiseAndSetIfChanged(ref _speed, value);
         }
 
-        private int _position;
-        public int Position {
+        private double _position;
+        public double Position {
             get => _position;
             private set => this.RaiseAndSetIfChanged(ref _position, value);
         }
@@ -48,6 +49,7 @@ namespace PlayGround.ViewModels
 
         public ReactiveCommand<Unit, Unit> TakeImageCommand { get; }
         public ReactiveCommand<Unit, Unit> VideoCommand { get; }
+        public ReactiveCommand<Unit, Unit> BackCommand { get; }
 
         private readonly float _fullSpeedZ;
         private readonly float _backSpeedZ;
@@ -64,6 +66,7 @@ namespace PlayGround.ViewModels
             _leftY = Preferences.Get(PreferenceKeys.Left, -0.6f);
 
             TakeImageCommand = ReactiveCommand.CreateFromTask(_ => ControlService.Current.TakeImage());
+            BackCommand = ReactiveCommand.CreateFromTask(_ => Shell.Current.GoToAsync(".."));
             VideoCommand = ReactiveCommand.Create(() =>
             {
                 if (VideoRunning)
@@ -95,11 +98,11 @@ namespace PlayGround.ViewModels
             }
 
             this.WhenAnyValue(x => x.Speed)
-                .Do(async x => await ControlService.Current.SetSpeed(x))
+                .Do(async x => await ControlService.Current.SetSpeed((int)x))
                 .Subscribe();
 
             this.WhenAnyValue(x => x.Position)
-                .Do(async x => await ControlService.Current.SetSteerPosition(x))
+                .Do(async x => await ControlService.Current.SetSteerPosition((int)x))
                 .Subscribe();
 
             this.GetIsActivated()
