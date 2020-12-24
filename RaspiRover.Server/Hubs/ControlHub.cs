@@ -21,12 +21,12 @@ namespace RaspiRover.Server.Hubs
 
         public async Task SetSpeed(int speed)
         {
-            await Clients.Others.SendAsync("SetSpeed", speed);
+            await Clients.Others.SendAsync("SetSpeed", "antrieb", speed);
         }
 
         public async Task SetSteerPosition(double position)
         {
-            await Clients.Others.SendAsync("SetSteerPosition", position);
+            await Clients.Others.SendAsync("SetSteerPosition", "lenkung", position);
         }
 
         public async Task StartVideo(int milliseconds)
@@ -50,17 +50,16 @@ namespace RaspiRover.Server.Hubs
 
         public async Task ActivateDistanceMeasurement()
         {
-            await Clients.Others.SendAsync("ActivateDistanceMeasurement");
+            await Clients.Others.SendAsync("ActivateDistanceMeasurement", "front");
         }
 
 
         public async Task DeactivateDistanceMeasurement()
         {
-            _logger.LogDebug("Test");
-            await Clients.Others.SendAsync("DeactivateDistanceMeasurement");
+            await Clients.Others.SendAsync("DeactivateDistanceMeasurement", "front");
         }
 
-        public async Task DistanceMeasured(double distance)
+        public async Task DistanceMeasured(double distance, string sensorName)
         {
             await Clients.Others.SendAsync("DistanceMeasured", distance);
         }

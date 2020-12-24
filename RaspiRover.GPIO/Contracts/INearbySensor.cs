@@ -4,6 +4,6 @@ namespace RaspiRover.GPIO.Contracts
 {
     public interface INearbySensor
     {
-        IObservable<double> SubscribeToDistances();
+        IObservable<double> Distances();
     }
 }

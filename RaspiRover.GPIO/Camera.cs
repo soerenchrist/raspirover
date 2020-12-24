@@ -9,15 +9,19 @@ namespace RaspiRover.GPIO
 {
     public class Camera : ICamera
     {
+        public int CaptureWidth { get; init; }
+        public int CaptureHeight { get; init; }
+        public int JpgQuality { get; init; }
+
         public Task<byte[]> TakeImage()
         {
             var image = Pi.Camera.CaptureImageAsync(new CameraStillSettings
             {
-                CaptureWidth = 320,
-                CaptureHeight = 240,
-                CaptureJpegQuality = 50,
+                CaptureWidth = CaptureWidth,
+                CaptureHeight = CaptureHeight,
+                CaptureJpegQuality = JpgQuality,
                 CaptureDisplayPreview = false,
-                CaptureTimeoutMilliseconds = 300
+                CaptureTimeoutMilliseconds = 300,
             });
 
             return image;
@@ -28,9 +32,9 @@ namespace RaspiRover.GPIO
             return Observable.Interval(interval)
                 .Select(x => Pi.Camera.CaptureImage(new CameraStillSettings
                 {
-                    CaptureWidth = 320,
-                    CaptureHeight = 240,
-                    CaptureJpegQuality = 50,
+                    CaptureWidth = CaptureWidth,
+                    CaptureHeight = CaptureHeight,
+                    CaptureJpegQuality = JpgQuality,
                     CaptureDisplayPreview = false,
                     CaptureTimeoutMilliseconds = 300
                 }));

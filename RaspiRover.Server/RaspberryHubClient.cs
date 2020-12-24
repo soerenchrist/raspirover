@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using RaspiRover.GPIO;
 using RaspiRover.GPIO.Config;
-using RaspiRover.GPIO.Contracts;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading;
@@ -16,10 +15,9 @@ namespace RaspiRover.Server
     {
         private readonly ILogger<RaspberryHubClient> _logger;
         private readonly RoverConfiguration _configuration;
-        private ICamera? _camera;
         private HubConnection? _connection;
         private IDisposable? _cameraDisposable;
-        private IDisposable? _distanceDisposable;
+        private readonly Dictionary<string, IDisposable> _activeDistanceMeasurements = new();
 
         public RaspberryHubClient(IHostApplicationLifetime lifetime,
             ILogger<RaspberryHubClient> logger,
@@ -37,7 +35,7 @@ namespace RaspiRover.Server
             _logger.LogInformation($"Initializing {_configuration.Servos.Count} Servos");
             _logger.LogInformation($"Initializing {_configuration.Lights.Count} Lights");
             _logger.LogInformation($"Initializing {_configuration.DistanceSensors.Count} Distance Sensors");
-            _logger.LogInformation($"Camera enabled: {_configuration.Camera.Enabled}");
+            _logger.LogInformation($"Camera enabled: {_configuration.Camera != null}");
             foreach (var motor in _configuration.Motors.Values)
             {
                 motor.Init();
@@ -56,11 +54,6 @@ namespace RaspiRover.Server
             foreach (var distanceSensor in _configuration.DistanceSensors.Values)
             {
                 distanceSensor.Init();
-            }
-
-            if (_configuration.Camera.Enabled)
-            {
-                _camera = new Camera();
             }
         }
 
@@ -84,31 +77,26 @@ namespace RaspiRover.Server
                 })
                 .Build();
 
-            _connection.On<int>("SetSpeed", speed =>
+            _connection.On<string, int>("SetSpeed", (motorName, speed) =>
             {
-                _logger.LogDebug($"Setting speed to {speed}");
-                if (_configuration.Motors.ContainsKey("antrieb"))
-                    _configuration.Motors["antrieb"].Speed = speed;
-
-                if (_configuration.Lights.ContainsKey("ruecklicht"))
-                {
-                    _configuration.Lights["ruecklicht"].On = speed < 0;
-                }
+                _logger.LogDebug($"Setting speed of {motorName} to {speed}");
+                if (_configuration.Motors.TryGetValue(motorName, out var motor))
+                    motor.Speed = speed;
             });
 
-            _connection.On<int>("SetSteerPosition", i =>
+            _connection.On<string, int>("SetSteerPosition", (servoName, position) =>
             {
-                _logger.LogDebug($"Setting steer position to {i}");
-                if (_configuration.Servos.ContainsKey("lenkung"))
-                    _configuration.Servos["lenkung"].Position = i;
+                _logger.LogDebug($"Setting steer position of {servoName} to {position}");
+                if (_configuration.Servos.TryGetValue(servoName, out var servo))
+                    servo.Position = position;
             });
 
             _connection.On("TakeImage", async () =>
             {
                 _logger.LogDebug("Requested to take a picture");
-                if (_camera != null)
+                if (_configuration.Camera != null)
                 {
-                    var image = await _camera.TakeImage();
+                    var image = await _configuration.Camera.TakeImage();
                     await _connection.SendAsync("ImageTaken", image);
                 }
             });
@@ -116,35 +104,42 @@ namespace RaspiRover.Server
             _connection.On<int>("StartVideo", (interval) =>
             {
                 _logger.LogDebug("Requested to start video streaming");
-                if (_camera == null) return;
-                _cameraDisposable = _camera.StartVideoStream(TimeSpan.FromMilliseconds(interval))
+                if (_configuration.Camera == null) return;
+                _cameraDisposable = _configuration.Camera.StartVideoStream(TimeSpan.FromMilliseconds(interval))
                     .Do(x => _connection.SendAsync("ImageTaken", x))
                     .Subscribe();
             });
 
             _connection.On("StopVideo", () =>
             {
-                _logger.LogDebug($"Requested to stop video streaming");
+                _logger.LogDebug("Requested to stop video streaming");
                 _cameraDisposable?.Dispose();
             });
 
-            _connection.On("ActivateDistanceMeasurement", () =>
+            _connection.On<string>("ActivateDistanceMeasurement", sensorName =>
             {
-                _logger.LogDebug("Activating distance measurements");
-                if (_configuration.DistanceSensors.ContainsKey("front"))
-                    _distanceDisposable = _configuration.DistanceSensors["front"]
-                        .SubscribeToDistances()
+                _logger.LogDebug($"Activating distance measurements on {sensorName}");
+
+                if (_configuration.DistanceSensors.TryGetValue(sensorName, out var sensor))
+                {
+                    var disposable = sensor
+                        .Distances()
                         .Subscribe(distance =>
                         {
                             _logger.LogDebug($"Measured distance of {Math.Round(distance)}cm");
                             _connection.SendAsync("DistanceMeasured", distance);
                         });
+                    _activeDistanceMeasurements[sensorName] = disposable;
+                }
             });
 
-            _connection.On("DeactivateDistanceMeasurement", () =>
+            _connection.On<string>("DeactivateDistanceMeasurement", sensorName =>
             {
-                _logger.LogDebug("Deactivating distance measurement");
-                _distanceDisposable?.Dispose();
+                _logger.LogDebug($"Deactivating distance measurement of {sensorName}");
+                if (_activeDistanceMeasurements.TryGetValue(sensorName, out var disposable))
+                {
+                    disposable.Dispose();
+                }
             });
 
             await _connection.StartAsync();

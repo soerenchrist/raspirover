@@ -25,7 +25,7 @@ namespace RaspiRover.GPIO
             _echoPin.PinMode = GpioPinDriveMode.Input;
         }
 
-        public IObservable<double> SubscribeToDistances()
+        public IObservable<double> Distances()
         {
             if (_echoPin == null || _triggerPin == null)
                 throw new InvalidOperationException("You have to call init before subscribing");

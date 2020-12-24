@@ -10,11 +10,7 @@ namespace RaspiRover.GPIO.Config
         public Dictionary<string, DistanceSensor> DistanceSensors { get; init; } =
             new Dictionary<string, DistanceSensor>();
         public Dictionary<string, Light> Lights { get; init; } = new Dictionary<string, Light>();
-        public CameraConfiguration Camera { get; init; } = new CameraConfiguration();
+        public Camera? Camera { get; init; }
     }
 
-    public class CameraConfiguration
-    {
-        public bool Enabled { get; init; }
-    }
 }
