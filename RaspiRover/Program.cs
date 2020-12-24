@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Threading;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.Configuration;
-using RaspiRover.GPIO;
 using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Abstractions;
 using Unosquare.WiringPi;
@@ -13,16 +9,19 @@ namespace RaspiRover
     {
         static void Main(string[] args)
         {
-            var connection = new HubConnectionBuilder()
-                .WithUrl("http://192.168.100.142:5000/control")
-                .Build();
+            Pi.Init<BootstrapWiringPi>();
 
-            connection.StartAsync();
+            var gpio = (GpioPin)Pi.Gpio[26];
 
-            for (int i = -100; i < 100; i++)
+            gpio.PinMode = GpioPinDriveMode.Output;
+            gpio.StartSoftPwm(0, 100);
+
+            while (true)
             {
-                connection.SendAsync("SetSteerPosition", i);
-                Thread.Sleep(100);
+                var input = Console.ReadLine();
+                var steer = int.Parse(input);
+
+                gpio.SoftPwmValue = steer;
             }
             /*
             var controller = new GpioController();

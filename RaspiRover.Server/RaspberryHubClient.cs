@@ -33,6 +33,11 @@ namespace RaspiRover.Server
 
         private void InitializeGpios()
         {
+            _logger.LogInformation($"Initializing {_configuration.Motors.Count} Motors");
+            _logger.LogInformation($"Initializing {_configuration.Servos.Count} Servos");
+            _logger.LogInformation($"Initializing {_configuration.Lights.Count} Lights");
+            _logger.LogInformation($"Initializing {_configuration.DistanceSensors.Count} Distance Sensors");
+            _logger.LogInformation($"Camera enabled: {_configuration.Camera.Enabled}");
             foreach (var motor in _configuration.Motors.Values)
             {
                 motor.Init();
@@ -154,6 +159,22 @@ namespace RaspiRover.Server
         {
             _logger.LogInformation("Stopping Raspberry pi client");
             _connection?.StopAsync(cancellationToken);
+            foreach (var motor in _configuration.Motors.Values)
+            {
+                motor.Dispose();
+            }
+            foreach (var servo in _configuration.Servos.Values)
+            {
+                servo.Dispose();
+            }
+            foreach (var light in _configuration.Lights.Values)
+            {
+                light.Dispose();
+            }
+            foreach (var distance in _configuration.DistanceSensors.Values)
+            {
+                distance.Dispose();
+            }
             _cameraDisposable?.Dispose();
             return Task.CompletedTask;
         }

@@ -14,9 +14,9 @@ namespace PlayGround.Controls
             {
                 var height = view.Height / 2;
                 var percentage = (double)newvalue;
-                var realHeight = height * percentage / 100;
+                var realHeight = height * percentage / 10;
                 var oldPercentage = (double)oldvalue;
-                var oldHeight = height * oldPercentage / 100;
+                var oldHeight = height * oldPercentage / 10;
 
                 view._label.Text = ((int)percentage).ToString();
 
@@ -101,14 +101,14 @@ namespace PlayGround.Controls
 
             if (value > 0)
             {
-                var perc = (int)(value / center * 100);
-                return Math.Min(perc, 100);
+                var perc = (int)(value / center * 10);
+                return Math.Min(perc, 10);
             }
 
             if (value < 0)
             {
-                var perc = (int)(value / center * 100);
-                return Math.Max(perc, -100);
+                var perc = (int)(value / center * 10);
+                return Math.Max(perc, -10);
             }
 
             return 0;

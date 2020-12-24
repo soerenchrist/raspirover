@@ -186,8 +186,8 @@ namespace PlayGround.ViewModels
                     {
                         if (down)
                         {
-                            var newPosition = Position - 3;
-                            Position = Math.Max(newPosition, -100);
+                            var newPosition = Position - 1;
+                            Position = Math.Max(newPosition, -10);
                         }
                         else
                             Position = 0;
@@ -204,8 +204,8 @@ namespace PlayGround.ViewModels
                     {
                         if (down)
                         {
-                            var newPosition = Position + 3;
-                            Position = Math.Min(newPosition, 100);
+                            var newPosition = Position + 1;
+                            Position = Math.Min(newPosition, 10);
                         }
                         else
                             Position = 0;
@@ -233,12 +233,12 @@ namespace PlayGround.ViewModels
         private int CalculatePosition(Vector3 orientation)
         {
             if (orientation.Y < _leftY)
-                return -100;
+                return -10;
             if (orientation.Y > _rightY)
-                return 100;
+                return 10;
 
-            const int lowerBound = -100;
-            const int upperBound = 100;
+            const int lowerBound = -10;
+            const int upperBound = 10;
 
             return (int)MapToRange(orientation.Y, (_leftY, _rightY), (lowerBound, upperBound));
         }

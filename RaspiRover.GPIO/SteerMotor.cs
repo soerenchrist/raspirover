@@ -9,6 +9,8 @@ namespace RaspiRover.GPIO
     public class SteerMotor : ISteerMotor, IGpioPart
     {
         public int Pin { get; init; }
+        public double UpperRange { get; init; }
+        public double LowerRange { get; init; }
 
         private GpioPin? _gpioPin;
 
@@ -22,10 +24,10 @@ namespace RaspiRover.GPIO
 
         public double Position {
             set {
-                if (value > 100)
-                    value = 100;
-                if (value < -100)
-                    value = -100;
+                if (value > 10)
+                    value = 10;
+                if (value < -10)
+                    value = -10;
 
                 if (_gpioPin == null)
                     throw new InvalidOperationException("You have to call Init before settings the steer position");
@@ -34,13 +36,13 @@ namespace RaspiRover.GPIO
             }
         }
 
-        private static int MapToRange(double value)
+        private int MapToRange(double value)
         {
-            const double left = 5;
-            const double right = 15;
 
-            var slope = (right - left) / (100 - -100);
-            var output = left + slope * (value - -100);
+            var slope = (UpperRange - LowerRange) / (10 - -10);
+            var output = LowerRange + slope * (value - -10);
+
+            Console.WriteLine($"Settings servo to {output}");
 
             return (int)output;
         }
