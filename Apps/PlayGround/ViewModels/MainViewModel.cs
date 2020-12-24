@@ -9,7 +9,7 @@ namespace PlayGround.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
-        private ObservableAsPropertyHelper<bool> _isGyroSupported;
+        private readonly ObservableAsPropertyHelper<bool> _isGyroSupported;
         public bool IsGyroSupported => _isGyroSupported.Value;
 
         private bool _isGyroControl;
