@@ -62,7 +62,7 @@ namespace PlayGround.ViewModels
                 .Where(x => x != null)
                 .Do(async x =>
                 {
-                    foreach (var service in x)
+                    foreach (var service in x!)
                     {
                         var characteristics = await service.GetCharacteristicsAsync();
                         foreach (var characteristic in characteristics)

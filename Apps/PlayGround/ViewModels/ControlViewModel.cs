@@ -30,6 +30,12 @@ namespace PlayGround.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _gyroMode, value);
         }
 
+        private bool _frontLightOn;
+        public bool FrontLightOn {
+            get => _frontLightOn;
+            set => this.RaiseAndSetIfChanged(ref _frontLightOn, value);
+        }
+
         private double _speed;
         public double Speed {
             get => _speed;
@@ -51,6 +57,7 @@ namespace PlayGround.ViewModels
         public ReactiveCommand<Unit, Unit> TakeImageCommand { get; }
         public ReactiveCommand<Unit, Unit> VideoCommand { get; }
         public ReactiveCommand<Unit, Unit> BackCommand { get; }
+        public ReactiveCommand<Unit, Unit> ToggleLightCommand { get; }
 
         private readonly float _fullSpeedZ;
         private readonly float _backSpeedZ;
@@ -67,6 +74,11 @@ namespace PlayGround.ViewModels
             _leftY = Preferences.Get(PreferenceKeys.Left, -0.6f);
 
             TakeImageCommand = ReactiveCommand.CreateFromTask(_ => ControlService.Current.TakeImage());
+            ToggleLightCommand = ReactiveCommand.CreateFromTask(() =>
+            {
+                FrontLightOn = !FrontLightOn;
+                return ControlService.Current.SetFrontLight(FrontLightOn);
+            });
             BackCommand = ReactiveCommand.CreateFromTask(_ => Shell.Current.GoToAsync(".."));
             VideoCommand = ReactiveCommand.Create(() =>
             {

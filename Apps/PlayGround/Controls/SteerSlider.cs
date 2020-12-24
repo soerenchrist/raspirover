@@ -18,8 +18,6 @@ namespace PlayGround.Controls
                 var oldPercentage = (double)oldvalue;
                 var oldHeight = height * oldPercentage / 10;
 
-                view._label.Text = ((int)percentage).ToString();
-
                 if (realHeight > 0)
                 {
                     var animation = new Animation(d => view._rightBoxView.WidthRequest = d, oldHeight > 0 ? oldHeight : 0, realHeight, Easing.Linear);
@@ -78,19 +76,6 @@ namespace PlayGround.Controls
         public Color RightColor {
             get => (Color)GetValue(RightColorProperty);
             set => SetValue(RightColorProperty, value);
-        }
-
-        public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(SteerSlider), Color.White, propertyChanged: TextColorChanged);
-
-        private static void TextColorChanged(BindableObject bindable, object oldvalue, object newvalue)
-        {
-            if (bindable is SteerSlider view)
-                view._label.TextColor = (Color)newvalue;
-        }
-
-        public Color TextColor {
-            get => (Color)GetValue(TextColorProperty);
-            set => SetValue(TextColorProperty, value);
         }
 
 
@@ -158,26 +143,21 @@ namespace PlayGround.Controls
             Children.Add(_rightBoxView);
             Children.Add(_leftBoxView);
 
-            _label = new Label
+            var divider = new BoxView
             {
-                FontSize = 30,
-                TextColor = TextColor,
-                FontAttributes = FontAttributes.Bold,
+                BackgroundColor = Color.FromHex("#eeeeee"),
                 HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                Text = "0"
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                WidthRequest = 1
             };
+            SetColumn(divider, 0);
+            SetColumnSpan(divider, 2);
+            Children.Add(divider);
 
-            SetColumnSpan(_label, 2);
-            SetColumn(_label, 0);
-            Children.Add(_label);
         }
 
         private double _currentValue;
         private double _lastValue;
-        private readonly Label _label;
 
         private void PanGestureRecognizerOnPanUpdated(object sender, PanUpdatedEventArgs e)
         {

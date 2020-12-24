@@ -63,5 +63,10 @@ namespace RaspiRover.Server.Hubs
         {
             await Clients.Others.SendAsync("DistanceMeasured", distance);
         }
+
+        public async Task SetLight(string lightName, bool value)
+        {
+            await Clients.Others.SendAsync("SetLight", lightName, value);
+        }
     }
 }

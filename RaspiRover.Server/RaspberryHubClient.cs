@@ -116,6 +116,15 @@ namespace RaspiRover.Server
                 _cameraDisposable?.Dispose();
             });
 
+            _connection.On<string, bool>("SetLight", (lightName, state) =>
+            {
+                _logger.LogDebug($"Toggling light {lightName}");
+                if (_configuration.Lights.TryGetValue(lightName, out var light))
+                {
+                    light.On = state;
+                }
+            });
+
             _connection.On<string>("ActivateDistanceMeasurement", sensorName =>
             {
                 _logger.LogDebug($"Activating distance measurements on {sensorName}");

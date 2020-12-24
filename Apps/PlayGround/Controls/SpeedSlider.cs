@@ -18,8 +18,6 @@ namespace PlayGround.Controls
                 var oldPercentage = (double)oldvalue;
                 var oldHeight = height * oldPercentage / 100;
 
-                view._label.Text = ((int)percentage).ToString();
-
                 if (realHeight > 0)
                 {
                     var animation = new Animation(d => view._positiveBoxView.HeightRequest = d, oldHeight > 0 ? oldHeight : 0, realHeight, Easing.Linear);
@@ -79,20 +77,6 @@ namespace PlayGround.Controls
             set => SetValue(NegativeColorProperty, value);
         }
 
-        public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(SteerSlider), Color.White, propertyChanged: TextColorChanged);
-
-        private static void TextColorChanged(BindableObject bindable, object oldvalue, object newvalue)
-        {
-            if (bindable is SpeedSlider view)
-                view._label.TextColor = (Color)newvalue;
-        }
-
-        public Color TextColor {
-            get => (Color)GetValue(TextColorProperty);
-            set => SetValue(TextColorProperty, value);
-        }
-
-
         public double Value {
             get => (double)GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
@@ -137,26 +121,21 @@ namespace PlayGround.Controls
             Children.Add(_positiveBoxView);
             Children.Add(_negativeBoxView);
 
-            _label = new Label
+            var divider = new BoxView
             {
-                FontSize = 30,
-                TextColor = TextColor,
-                FontAttributes = FontAttributes.Bold,
-                HorizontalOptions = LayoutOptions.Center,
+                HeightRequest = 1,
+                BackgroundColor = Color.FromHex("#eeeeee"),
                 VerticalOptions = LayoutOptions.Center,
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalTextAlignment = TextAlignment.Center,
-                Text = "0"
+                HorizontalOptions = LayoutOptions.FillAndExpand
             };
 
-            SetRowSpan(_label, 2);
-            SetRow(_label, 0);
-            Children.Add(_label);
+            SetRow(divider, 0);
+            SetRowSpan(divider, 2);
+            Children.Add(divider);
         }
 
         private double _lastValue;
         private double _currentValue;
-        private readonly Label _label;
 
         private void PanGestureRecognizerOnPanUpdated(object sender, PanUpdatedEventArgs e)
         {

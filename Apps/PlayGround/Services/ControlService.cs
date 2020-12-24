@@ -115,6 +115,8 @@ namespace PlayGround.Services
             try
             {
                 await _connection.SendAsync("SetSpeed", speed);
+                await _connection.SendAsync("SetLight", "back", speed < 0);
+
             }
             catch (Exception) { }
         }
@@ -150,6 +152,17 @@ namespace PlayGround.Services
                     _connection.SendAsync("DeactivateDistanceMeasurement");
                 });
             });
+        }
+
+        public async Task SetFrontLight(bool value)
+        {
+            if (_connection == null || _connection.State != HubConnectionState.Connected)
+                return;
+            try
+            {
+                await _connection.SendAsync("SetLight", "front", value);
+            }
+            catch (Exception) { }
         }
     }
 }

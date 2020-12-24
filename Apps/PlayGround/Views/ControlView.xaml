@@ -56,12 +56,23 @@
                      HorizontalOptions="End"
                      Orientation="Horizontal">
 
+            <Button x:Name="ToggleLightButton"
+                    FontFamily="MaterialIcons"
+                    FontSize="Medium"
+                    BackgroundColor="{StaticResource BackgroundColor}"
+                    />
+
             <Button x:Name="TakeImageButton"
                     HorizontalOptions="End"
-                    Text="Foto"/>
+                    BackgroundColor="{StaticResource BackgroundColor}"
+                    FontFamily="MaterialIcons"
+                    FontSize="Medium"
+                    Text="{x:Static utility:IconFont.Camera}"/>
 
             <Button x:Name="VideoButton"
-                    Text="Video"/>
+                    BackgroundColor="{StaticResource BackgroundColor}"
+                    FontFamily="MaterialIcons"
+                    FontSize="Medium"/>
         </StackLayout>
 
         <Button x:Name="BackButton"

@@ -16,5 +16,6 @@ namespace PlayGround.Services
         Task StartVideo();
         Task StopVideo();
         IObservable<double> MeasureDistance();
+        Task SetFrontLight(bool value);
     }
 }
