@@ -25,6 +25,9 @@ namespace RaspiRover.GPIO
                 if (_gpioPin == null)
                     throw new InvalidOperationException("You have to call init before setting lights on");
 
+                if (_on == value)
+                    return;
+
                 _on = value;
                 _gpioPin.Write(value);
             }

@@ -8,6 +8,7 @@ namespace RaspiRover.GPIO
 {
     public class SteerMotor : ISteerMotor, IGpioPart
     {
+        private double _position;
         public int Pin { get; init; }
         public double UpperRange { get; init; }
         public double LowerRange { get; init; }
@@ -32,6 +33,10 @@ namespace RaspiRover.GPIO
                 if (_gpioPin == null)
                     throw new InvalidOperationException("You have to call Init before settings the steer position");
 
+                if (Math.Abs(_position - value) < 0.0001)
+                    return;
+                _position = value;
+
                 _gpioPin.SoftPwmValue = MapToRange(value);
             }
         }
@@ -41,8 +46,6 @@ namespace RaspiRover.GPIO
 
             var slope = (UpperRange - LowerRange) / (10 - -10);
             var output = LowerRange + slope * (value - -10);
-
-            Console.WriteLine($"Settings servo to {output}");
 
             return (int)output;
         }

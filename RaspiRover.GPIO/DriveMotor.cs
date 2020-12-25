@@ -39,6 +39,9 @@ namespace RaspiRover.GPIO
                 if (_forwardPwm == null || _backwardPwm == null)
                     throw new InvalidOperationException("Call init before setting the speed");
 
+                if (_speed == value)
+                    return;
+
                 if (_speed == 0)
                 {
                     _forwardPwm.SoftPwmValue = 0;
