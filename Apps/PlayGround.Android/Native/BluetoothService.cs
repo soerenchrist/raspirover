@@ -56,7 +56,7 @@ namespace PlayGround.Android.Native
                 _socket = CreateSocket(device);
                 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -70,7 +70,7 @@ namespace PlayGround.Android.Native
                     _outputStream = _socket.OutputStream;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -99,17 +99,34 @@ namespace PlayGround.Android.Native
                 return Task.CompletedTask;
             
             if (_inputStream != null) {
-                try {_inputStream.Close();} catch (Exception e) {}
+                try
+                {
+                    _inputStream.Close();
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
                 _inputStream = null;
             }
 
             if (_outputStream != null) {
-                try {_outputStream.Close();} catch (Exception e) {}
+                try
+                {
+                    _outputStream.Close();
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
                 _outputStream = null;
             }
 
             if (_socket != null) {
-                try {_socket.Close();} catch (Exception e) {}
+                try {_socket.Close();} catch (Exception) 
+                {
+                    //ignored
+                }
                 _socket = null;
             }
 

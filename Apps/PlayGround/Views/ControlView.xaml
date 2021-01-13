@@ -30,16 +30,6 @@
                  Grid.ColumnSpan="2"
                  HorizontalOptions="Center"
                  VerticalOptions="FillAndExpand"/>
-        <Image HeightRequest="240"
-               WidthRequest="320"
-               Grid.Column="0"
-               Grid.Row="0"
-               Grid.RowSpan="2"
-               Grid.ColumnSpan="2"
-               HorizontalOptions="Center"
-               VerticalOptions="Start"
-               Aspect="AspectFit"
-               x:Name="TakenImage"/>
 
         <StackLayout Grid.Row="0"
                      Grid.Column="1"
@@ -74,12 +64,5 @@
                 FontFamily="MaterialIcons"
                 BackgroundColor="{StaticResource BackgroundColor}"
                 />
-
-        <controls:DistanceIndicator MaxValue="400"
-                                    x:Name="DistanceIndicator"
-                                    Grid.Row="1"
-                                    IndicatorColor="{StaticResource AccentColor}"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2"/>
     </Grid>
 </xamForms:ReactiveContentPage>

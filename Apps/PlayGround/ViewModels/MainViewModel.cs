@@ -4,7 +4,6 @@ using PlayGround.Util;
 using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using PlayGround.Services;
 using Xamarin.Essentials;
@@ -24,7 +23,6 @@ namespace PlayGround.ViewModels
         }
         public ReactiveCommand<Unit, Unit> StartRoverCommand { get; }
         public ReactiveCommand<Unit, Unit> StartCalibrationCommand { get; }
-        public ReactiveCommand<Unit, Unit> StartSettingsCommand { get; }
         public ReactiveCommand<bool, Unit> SetControlCommand { get; }
         public ReactiveCommand<Unit, Unit> DevicesCommand { get; }
         
@@ -59,7 +57,6 @@ namespace PlayGround.ViewModels
             StartRoverCommand = ReactiveCommand.CreateFromTask(StartRover);
             DevicesCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("devices"));
             StartCalibrationCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("calibrate"));
-            StartSettingsCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("settings"));
             SetControlCommand = ReactiveCommand.Create<bool>(x =>
             {
                 IsGyroControl = x;

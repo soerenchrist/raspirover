@@ -43,10 +43,6 @@
                 <Button Text="Geräte"
                         VerticalOptions="Center"
                         x:Name="DevicesButton"/>
-
-                <Button Text="Einstellungen"
-                        VerticalOptions="Center"
-                        x:Name="StartSettingsButton"/>
             </StackLayout>
 
         </Grid>

@@ -8,6 +8,5 @@
         <Tab>
             <ShellContent Title="Main" ContentTemplate="{DataTemplate views:MainView}"/>
         </Tab>
-        
     </TabBar>
 </Shell>

@@ -28,10 +28,10 @@ namespace PlayGround.Android
 
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
             Window?.AddFlags(WindowManagerFlags.Fullscreen | WindowManagerFlags.TurnScreenOn | WindowManagerFlags.KeepScreenOn);
-            View decorView = Window?.DecorView;
+            var decorView = Window?.DecorView;
             if (decorView != null)
             {
                 var uiOptions =

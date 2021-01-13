@@ -11,48 +11,23 @@ namespace PlayGround.Services
         private readonly IBluetoothService _bluetoothService;
         private static IControlService? _instance;
         public static IControlService Current => _instance ??= new ControlService(DependencyService.Get<IBluetoothService>());
-
-        private readonly BehaviorSubject<byte[]?> _imageSubject = new(null);
-        
-        public IObservable<byte[]?> LastImage => _imageSubject.AsObservable();
-
         private ControlService(IBluetoothService bluetoothService)
         {
             _bluetoothService = bluetoothService;
         }
 
-        public async Task TakeImage()
+        public async Task Disconnect()
         {
-           /*try
-            {
-                await _connection.SendAsync("TakeImage");
-            }
-            catch (Exception) { }*/
-        }
-
-        public async Task StartVideo()
-        {
-           /* if (_connection == null || _connection.State != HubConnectionState.Connected)
-                return;
             try
             {
-                int interval = Preferences.Get(PreferenceKeys.VideoFrameRate, 500);
-                await _connection.SendAsync("StartVideo", interval);
+                await _bluetoothService.Disconnect();
             }
-            catch (Exception) { }*/
-        }
-
-        public async Task StopVideo()
-        {
-          /*  if (_connection == null || _connection.State != HubConnectionState.Connected)
-                return;
-            try
+            catch (Exception)
             {
-                await _connection.SendAsync("StopVideo");
+                // ignored
             }
-            catch (Exception) { }*/
         }
-
+        
         public async Task SetSpeed(int speed)
         {
             try
@@ -60,7 +35,10 @@ namespace PlayGround.Services
                 var value = Map(speed, -100, 100, 0, 99);
                 await _bluetoothService.SendData((byte)value);
             }
-            catch (Exception) { }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         public async Task SetSteerPosition(int steerPosition)
@@ -72,6 +50,7 @@ namespace PlayGround.Services
             }
             catch (Exception)
             {
+                // ignored
             }
         }
         private int Map(int x, int inMin, int inMax, int outMin, int outMax)
@@ -81,40 +60,19 @@ namespace PlayGround.Services
 
         public IObservable<double> MeasureDistance()
         {
-            /*if (_connection == null || _connection.State != HubConnectionState.Connected)
-                return Observable.Return(0.0);
-
-            return Observable.Create<double>(observer =>
-            {
-                _connection.SendAsync("ActivateDistanceMeasurement");
-                _connection.On<double>("DistanceMeasured", distance =>
-                {
-                    observer.OnNext(distance);
-                });
-
-                return Disposable.Create(() =>
-                {
-                    _connection.SendAsync("DeactivateDistanceMeasurement");
-                });
-            });*/
             return Observable.Return(0.0);
         }
 
         public async Task SetFrontLight(bool value)
         {
-           /* if (_connection == null || _connection.State != HubConnectionState.Connected)
-                return;
-            try
-            {
-                await _connection.SendAsync("SetLight", "front", value);
-            }
-            catch (Exception) { }*/
+          
            try
            {
                await _bluetoothService.SendData(value ? 255 : 254);
            }
-           catch (Exception e)
+           catch (Exception)
            {
+               // ignored
            }
         }
     }

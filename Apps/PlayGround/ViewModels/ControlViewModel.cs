@@ -13,12 +13,6 @@ namespace PlayGround.ViewModels
 {
     public class ControlViewModel : ViewModelBase
     {
-        private readonly ObservableAsPropertyHelper<double> _distance;
-        public double Distance => _distance.Value;
-
-        private readonly ObservableAsPropertyHelper<byte[]?> _image;
-        public byte[]? Image => _image.Value;
-
         private readonly ObservableAsPropertyHelper<Vector3> _orientation;
         private Vector3 Orientation => _orientation.Value;
         private bool _gyroMode;
@@ -45,14 +39,6 @@ namespace PlayGround.ViewModels
             private set => this.RaiseAndSetIfChanged(ref _position, value);
         }
 
-        private bool _videoRunning;
-        public bool VideoRunning {
-            get => _videoRunning;
-            private set => this.RaiseAndSetIfChanged(ref _videoRunning, value);
-        }
-
-        public ReactiveCommand<Unit, Unit> TakeImageCommand { get; }
-        public ReactiveCommand<Unit, Unit> VideoCommand { get; }
         public ReactiveCommand<Unit, Unit> BackCommand { get; }
         public ReactiveCommand<Unit, Unit> ToggleLightCommand { get; }
 
@@ -70,21 +56,12 @@ namespace PlayGround.ViewModels
             _rightY = Preferences.Get(PreferenceKeys.Right, 0.6f);
             _leftY = Preferences.Get(PreferenceKeys.Left, -0.6f);
 
-            TakeImageCommand = ReactiveCommand.CreateFromTask(_ => ControlService.Current.TakeImage());
             ToggleLightCommand = ReactiveCommand.CreateFromTask(() =>
             {
                 FrontLightOn = !FrontLightOn;
                 return ControlService.Current.SetFrontLight(FrontLightOn);
             });
             BackCommand = ReactiveCommand.CreateFromTask(_ => Shell.Current.GoToAsync(".."));
-            VideoCommand = ReactiveCommand.Create(() =>
-            {
-                if (VideoRunning)
-                    ControlService.Current.StopVideo();
-                else
-                    ControlService.Current.StartVideo();
-                VideoRunning = !VideoRunning;
-            });
 
             _orientation = Observable.FromEventPattern<AccelerometerChangedEventArgs>(
                     x => Accelerometer.ReadingChanged += x,
@@ -125,20 +102,9 @@ namespace PlayGround.ViewModels
                     else
                     {
                         if (GyroMode) Accelerometer.Stop();
+                        ControlService.Current.Disconnect();
                     }
                 }).Subscribe();
-
-            _distance = this.GetIsActivated()
-                .Delay(TimeSpan.FromSeconds(5))
-                .Select(x => x ? ControlService.Current.MeasureDistance() : Observable.Return(0.0))
-                .Switch()
-                .Do(Console.WriteLine)
-                .ToProperty(this, x => x.Distance, scheduler: RxApp.MainThreadScheduler);
-
-            _image = this.GetIsActivated()
-                .Select(active => active ? ControlService.Current.LastImage : Observable.Return<byte[]?>(null))
-                .Switch()
-                .ToProperty(this, x => x.Image);
 
             this.WhenActivated(disposable =>
             {
