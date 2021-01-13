@@ -21,7 +21,7 @@ namespace PlayGround.ViewModels
         public ReactiveCommand<Unit, Unit> StartCalibrationCommand { get; }
         public ReactiveCommand<Unit, Unit> StartSettingsCommand { get; }
         public ReactiveCommand<bool, Unit> SetControlCommand { get; }
-        public ReactiveCommand<Unit, Unit> SensorsCommand { get; }
+        public ReactiveCommand<Unit, Unit> DevicesCommand { get; }
 
         public MainViewModel()
         {
@@ -47,7 +47,7 @@ namespace PlayGround.ViewModels
 
             IsGyroControl = Preferences.Get(PreferenceKeys.IsGyro, true);
             StartRoverCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("control"));
-            SensorsCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("sensors"));
+            DevicesCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("devices"));
             StartCalibrationCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("calibrate"));
             StartSettingsCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("settings"));
             SetControlCommand = ReactiveCommand.Create<bool>(x =>

@@ -14,7 +14,7 @@ namespace PlayGround.Views
             InitializeComponent();
             this.WhenActivated(disposable =>
             {
-                this.Bind(ViewModel, x => x.ServerAdress, x => x.ServerEntry.Text)
+                this.Bind(ViewModel, x => x.ServerAddress, x => x.ServerEntry.Text)
                     .DisposeWith(disposable);
                 this.Bind(ViewModel, x => x.VideoFrameRateString, x => x.FrameRateEntry.Text)
                     .DisposeWith(disposable);

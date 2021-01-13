@@ -13,7 +13,7 @@ namespace PlayGround
             Routing.RegisterRoute("calibrate", typeof(CalibrateView));
             Routing.RegisterRoute("control", typeof(ControlView));
             Routing.RegisterRoute("settings", typeof(SettingsView));
-            Routing.RegisterRoute("sensors", typeof(SensorsView));
+            Routing.RegisterRoute("devices", typeof(BluetoothSettingsView));
         }
     }
 }

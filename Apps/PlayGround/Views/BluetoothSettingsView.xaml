@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<xamForms:ReactiveContentPage x:TypeArguments="viewModels:BluetoothSettingsViewModel" 
+                              xmlns="http://xamarin.com/schemas/2014/forms"
+                              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                              xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
+                              xmlns:viewModels="clr-namespace:PlayGround.ViewModels;assembly=PlayGround"
+                              xmlns:bluetooth="clr-namespace:Base2Base.Abstractions.Connectivity.Bluetooth;assembly=Base2Base.Abstractions"
+                              x:Class="PlayGround.Views.BluetoothSettingsView"
+                              Shell.NavBarIsVisible="False">
+    <ContentPage.Content>
+        <Grid Padding="16" RowDefinitions="*,Auto"
+              ColumnDefinitions="*,Auto">
+            <ListView CachingStrategy="RecycleElement"
+                      x:Name="DevicesList"
+                      Grid.ColumnSpan="2">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="bluetooth:BluetoothDevice">
+                        <ViewCell>
+                            <Label Text="{Binding Name}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Entry x:Name="MessageEntry"
+                   Keyboard="Numeric"
+                   Placeholder="Nachricht"
+                   Grid.Column="0"
+                   Grid.Row="1"/>
+            <Button x:Name="SendButton"
+                    Text="Senden"
+                    Grid.Column="1"
+                    Grid.Row="1"></Button>
+            
+        </Grid>
+    </ContentPage.Content>
+</xamForms:ReactiveContentPage>
