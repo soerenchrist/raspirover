@@ -13,9 +13,6 @@ namespace PlayGround.ViewModels
 {
     public class ControlViewModel : ViewModelBase
     {
-        private readonly ObservableAsPropertyHelper<bool> _connected;
-        public bool Connected => _connected.Value;
-
         private readonly ObservableAsPropertyHelper<double> _distance;
         public double Distance => _distance.Value;
 
@@ -123,12 +120,10 @@ namespace PlayGround.ViewModels
                 {
                     if (active)
                     {
-                        ControlService.Current.Connect();
                         if (GyroMode) Accelerometer.Start(SensorSpeed.UI);
                     }
                     else
                     {
-                        ControlService.Current.Disconnect();
                         if (GyroMode) Accelerometer.Stop();
                     }
                 }).Subscribe();
@@ -139,11 +134,6 @@ namespace PlayGround.ViewModels
                 .Switch()
                 .Do(Console.WriteLine)
                 .ToProperty(this, x => x.Distance, scheduler: RxApp.MainThreadScheduler);
-
-            _connected = this.GetIsActivated()
-                .Select(x => x ? ControlService.Current.Connected : Observable.Return(false))
-                .Switch()
-                .ToProperty(this, x => x.Connected, scheduler: RxApp.MainThreadScheduler);
 
             _image = this.GetIsActivated()
                 .Select(active => active ? ControlService.Current.LastImage : Observable.Return<byte[]?>(null))

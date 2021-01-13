@@ -12,27 +12,15 @@ namespace PlayGround.Services
         private static IControlService? _instance;
         public static IControlService Current => _instance ??= new ControlService(DependencyService.Get<IBluetoothService>());
 
-        private readonly BehaviorSubject<bool> _connectedSubject = new(false);
         private readonly BehaviorSubject<byte[]?> _imageSubject = new(null);
         
         public IObservable<byte[]?> LastImage => _imageSubject.AsObservable();
-        public IObservable<bool> Connected => _connectedSubject.AsObservable();
 
         private ControlService(IBluetoothService bluetoothService)
         {
             _bluetoothService = bluetoothService;
         }
 
-        public async Task Connect()
-        {
-            
-        }
-
-        public async Task Disconnect()
-        {
-            
-        }
-        
         public async Task TakeImage()
         {
            /*try
@@ -69,7 +57,8 @@ namespace PlayGround.Services
         {
             try
             {
-                await _bluetoothService.SendData((byte)speed);
+                var value = Map(speed, -100, 100, 0, 99);
+                await _bluetoothService.SendData((byte)value);
             }
             catch (Exception) { }
         }
@@ -78,11 +67,16 @@ namespace PlayGround.Services
         {
             try
             {
-                await _bluetoothService.SendData((byte)steerPosition);
+                var value = Map(steerPosition, -10, 10, 101, 163);
+                await _bluetoothService.SendData((byte)value);
             }
             catch (Exception)
             {
             }
+        }
+        private int Map(int x, int inMin, int inMax, int outMin, int outMax)
+        {
+            return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
         }
 
         public IObservable<double> MeasureDistance()

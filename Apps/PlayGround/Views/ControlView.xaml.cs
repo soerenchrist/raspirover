@@ -25,9 +25,6 @@ namespace PlayGround.Views
                     .DisposeWith(disposable);
                 this.Bind(ViewModel, x => x.Position, x => x.SteerSlider.Value)
                     .DisposeWith(disposable);
-                this.OneWayBind(ViewModel, x => x.Connected, x => x.ConnectionState.BackgroundColor,
-                        connected => connected ? Color.Green : Color.Red)
-                    .DisposeWith(disposable);
                 this.WhenAnyValue(x => x.ViewModel!.Image)
                     .Where(x => x != null)
                     .Select(x => ImageSource.FromStream(() => new MemoryStream(x)))

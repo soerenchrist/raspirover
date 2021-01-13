@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.Bluetooth;
@@ -18,6 +19,8 @@ namespace PlayGround.Android.Native
         private List<BluetoothDevice> _devices = new List<BluetoothDevice>();
         private readonly BluetoothAdapter _adapter;
         private BluetoothSocket? _socket;
+        private Stream? _inputStream;
+        private Stream? _outputStream;
         private static UUID? BtModuleUuid => UUID.FromString("00001101-0000-1000-8000-00805F9B34FB"); 
 
         public BluetoothService()
@@ -61,7 +64,11 @@ namespace PlayGround.Android.Native
             try
             {
                 if (_socket != null)
+                {
                     await _socket.ConnectAsync();
+                    _inputStream = _socket.InputStream;
+                    _outputStream = _socket.OutputStream;
+                }
             }
             catch (Exception ex)
             {
@@ -81,10 +88,9 @@ namespace PlayGround.Android.Native
             if (_socket == null || !_socket.IsConnected)
                 throw new InvalidOperationException("Not connected");
 
-            var stream = _socket.OutputStream;
-            if (stream == null)
+            if (_outputStream == null)
                 throw new InvalidOperationException("No output stream");
-            await stream.WriteAsync(new[] {value}, 0, 1);
+            await _outputStream.WriteAsync(new[] {value}, 0, 1);
         }
 
         public Task Disconnect()
@@ -92,8 +98,20 @@ namespace PlayGround.Android.Native
             if (_socket == null || !_socket.IsConnected)
                 return Task.CompletedTask;
             
-            _socket.Dispose();
-            _socket = null;
+            if (_inputStream != null) {
+                try {_inputStream.Close();} catch (Exception e) {}
+                _inputStream = null;
+            }
+
+            if (_outputStream != null) {
+                try {_outputStream.Close();} catch (Exception e) {}
+                _outputStream = null;
+            }
+
+            if (_socket != null) {
+                try {_socket.Close();} catch (Exception e) {}
+                _socket = null;
+            }
 
             return Task.CompletedTask;
         }
