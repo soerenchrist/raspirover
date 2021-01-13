@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace PlayGround.Services
+﻿namespace PlayGround.Services
 {
     public class SensorTag
     {
-
+        private const string DeviceId = "00000000-0000-0000-0000-a0e6f8ae0607";
     }
 
     internal class IrTemperature

@@ -1,7 +1,12 @@
-﻿using PlayGround.Util;
+﻿using System.Collections.Generic;
+using System.Linq;
+using PlayGround.Util;
 using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using PlayGround.Services;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -22,9 +27,14 @@ namespace PlayGround.ViewModels
         public ReactiveCommand<Unit, Unit> StartSettingsCommand { get; }
         public ReactiveCommand<bool, Unit> SetControlCommand { get; }
         public ReactiveCommand<Unit, Unit> DevicesCommand { get; }
+        
+        public Interaction<List<Models.Device>, Models.Device?> SelectDeviceInteraction { get; }
+        public Interaction<string, Unit> ErrorInteraction { get; }
 
         public MainViewModel()
         {
+            SelectDeviceInteraction = new Interaction<List<Models.Device>, Models.Device?>();
+            ErrorInteraction = new Interaction<string, Unit>();
             _isGyroSupported = Observable.Start(() =>
             {
                 try
@@ -46,7 +56,7 @@ namespace PlayGround.ViewModels
             }).ToProperty(this, x => x.IsGyroSupported);
 
             IsGyroControl = Preferences.Get(PreferenceKeys.IsGyro, true);
-            StartRoverCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("control"));
+            StartRoverCommand = ReactiveCommand.CreateFromTask(StartRover);
             DevicesCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("devices"));
             StartCalibrationCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("calibrate"));
             StartSettingsCommand = ReactiveCommand.CreateFromTask(() => Shell.Current.GoToAsync("settings"));
@@ -57,5 +67,23 @@ namespace PlayGround.ViewModels
             });
         }
 
+        private async Task StartRover()
+        {
+            var bluetoothService = DependencyService.Get<IBluetoothService>();
+            var devices = bluetoothService.GetBondedDevices();
+
+            var chosenDevice = await SelectDeviceInteraction.Handle(devices.ToList());
+            if (chosenDevice == null)
+                return;
+
+            var connected = await bluetoothService.ConnectToDevice(chosenDevice.Address);
+            if (!connected)
+            {
+                await ErrorInteraction.Handle("Es konnte keine Verbindung hergestellt werden");
+                return;
+            }    
+            
+            await Shell.Current.GoToAsync("control");
+        }
     }
 }

@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Base2Base.Abstractions.Connectivity.Bluetooth;
 using PlayGround.Services;
-using PlayGround.Util;
 using PlayGround.ViewModels;
 using ReactiveUI;
 using Xamarin.Forms;
@@ -20,7 +13,8 @@ namespace PlayGround.Views
     {
         public BluetoothSettingsView()
         {
-            ViewModel = new BluetoothSettingsViewModel(BluetoothService.Current);
+            var blService = DependencyService.Get<IBluetoothService>();
+            ViewModel = new BluetoothSettingsViewModel(blService);
             InitializeComponent();
             this.WhenActivated(disposable =>
             {
@@ -31,11 +25,15 @@ namespace PlayGround.Views
                     .DisposeWith(disposable);
                 this.BindCommand(ViewModel, x => x.SendMessageCommand, x => x.SendButton)
                     .DisposeWith(disposable);
-                
-                Observable.FromEventPattern<ItemTappedEventArgs>(x => DevicesList.ItemTapped += x,
-                    x => DevicesList.ItemTapped -= x)
-                    .Select(args => (BluetoothDevice) args.EventArgs.Item)
-                    .InvokeCommand(ViewModel, x => x.ConnectToDeviceCommand);
+
+                this.Bind(ViewModel, x => x.SelectedDevice, x => x.DevicesList.SelectedItem)
+                    .DisposeWith(disposable);
+
+                this.OneWayBind(ViewModel, x => x.Connected, x => x.ConnectionStateView.BackgroundColor,
+                        x => x ? Color.Green : Color.Red)
+                    .DisposeWith(disposable);
+                this.BindCommand(ViewModel, x => x.ConnectToDeviceCommand, x => x.ConnectButton)
+                    .DisposeWith(disposable);
             });
         }
     }

@@ -12,7 +12,7 @@ namespace PlayGround
         public App()
         {
             InitializeComponent();
-
+            
             MainPage = new AppShell();
         }
         

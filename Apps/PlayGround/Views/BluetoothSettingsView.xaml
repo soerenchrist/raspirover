@@ -6,16 +6,28 @@
                               xmlns:xamForms="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
                               xmlns:viewModels="clr-namespace:PlayGround.ViewModels;assembly=PlayGround"
                               xmlns:bluetooth="clr-namespace:Base2Base.Abstractions.Connectivity.Bluetooth;assembly=Base2Base.Abstractions"
+                              xmlns:models="clr-namespace:PlayGround.Models;assembly=PlayGround"
                               x:Class="PlayGround.Views.BluetoothSettingsView"
                               Shell.NavBarIsVisible="False">
     <ContentPage.Content>
-        <Grid Padding="16" RowDefinitions="*,Auto"
+        <Grid Padding="16" RowDefinitions="Auto,*,Auto"
               ColumnDefinitions="*,Auto">
+            <Button Text="Verbinden"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    x:Name="ConnectButton"/>
+            <BoxView Grid.Row="0"
+                     Grid.Column="1"
+                     x:Name="ConnectionStateView"
+                     HorizontalOptions="Fill"
+                     VerticalOptions="Fill"
+                     Margin="6"/>
             <ListView CachingStrategy="RecycleElement"
                       x:Name="DevicesList"
+                      Grid.Row="1"
                       Grid.ColumnSpan="2">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="bluetooth:BluetoothDevice">
+                    <DataTemplate x:DataType="models:Device">
                         <ViewCell>
                             <Label Text="{Binding Name}"/>
                         </ViewCell>
@@ -26,11 +38,11 @@
                    Keyboard="Numeric"
                    Placeholder="Nachricht"
                    Grid.Column="0"
-                   Grid.Row="1"/>
+                   Grid.Row="2"/>
             <Button x:Name="SendButton"
                     Text="Senden"
                     Grid.Column="1"
-                    Grid.Row="1"></Button>
+                    Grid.Row="2"></Button>
             
         </Grid>
     </ContentPage.Content>

@@ -1,4 +1,6 @@
-﻿using PlayGround.ViewModels;
+﻿using System.Linq;
+using System.Reactive;
+using PlayGround.ViewModels;
 using ReactiveUI;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -35,11 +37,32 @@ namespace PlayGround.Views
                     .DisposeWith(disposable);
                 this.OneWayBind(ViewModel, x => x.IsGyroSupported, x => x.TouchControlButton.IsVisible)
                     .DisposeWith(disposable);
-
                 this.BindCommand(ViewModel, x => x.SetControlCommand, x => x.GyroControlButton,
-                    Observable.Return(true));
+                    Observable.Return(true))
+                    .DisposeWith(disposable);
                 this.BindCommand(ViewModel, x => x.SetControlCommand, x => x.TouchControlButton,
-                    Observable.Return(false));
+                    Observable.Return(false))
+                    .DisposeWith(disposable);
+
+                ViewModel.ErrorInteraction
+                    .RegisterHandler(interaction =>
+                    {
+                        this.DisplayAlert("Fehler", interaction.Input, "Ok");
+                        interaction.SetOutput(Unit.Default);
+                    }).DisposeWith(disposable);
+                ViewModel.SelectDeviceInteraction
+                    .RegisterHandler(async interaction =>
+                    {
+                        var result = await DisplayActionSheet("Gerät wählen", "Abbrechen", null,
+                            interaction.Input.Select(x => x.Name).ToArray());
+                        if (result == null)
+                            interaction.SetOutput(null);
+                        else
+                        {
+                            var device = interaction.Input.FirstOrDefault(x => x.Name == result);
+                            interaction.SetOutput(device);
+                        }
+                    }).DisposeWith(disposable);
             });
         }
     }

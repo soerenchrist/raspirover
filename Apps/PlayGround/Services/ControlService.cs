@@ -1,133 +1,84 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
-using PlayGround.Util;
-using System;
-using System.Reactive.Disposables;
+﻿using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace PlayGround.Services
 {
     public class ControlService : IControlService
     {
+        private readonly IBluetoothService _bluetoothService;
         private static IControlService? _instance;
-        public static IControlService Current => _instance ??= new ControlService();
+        public static IControlService Current => _instance ??= new ControlService(DependencyService.Get<IBluetoothService>());
 
         private readonly BehaviorSubject<bool> _connectedSubject = new(false);
         private readonly BehaviorSubject<byte[]?> _imageSubject = new(null);
-        private HubConnection? _connection;
-
-
+        
         public IObservable<byte[]?> LastImage => _imageSubject.AsObservable();
         public IObservable<bool> Connected => _connectedSubject.AsObservable();
 
-        private ControlService()
+        private ControlService(IBluetoothService bluetoothService)
         {
-
+            _bluetoothService = bluetoothService;
         }
 
         public async Task Connect()
         {
-            var url = Preferences.Get(PreferenceKeys.Server, "http://192.168.100.142:5000/control");
-            _connection = new HubConnectionBuilder()
-                .WithUrl(url)
-                .Build();
-
-            _connection.Closed += ConnectionOnClosed;
-            _connection.Reconnected += ConnectionOnReconnected;
-
-            _connection.On<byte[]>("ImageTaken", image =>
-            {
-                _imageSubject.OnNext(image);
-            });
-
-            try
-            {
-                await _connection.StartAsync();
-                _connectedSubject.OnNext(true);
-            }
-            catch (Exception)
-            {
-                _connectedSubject.OnNext(false);
-            }
+            
         }
 
         public async Task Disconnect()
         {
-            if (_connection == null)
-                return;
-            _connection.Closed -= ConnectionOnClosed;
-            _connection.Reconnected -= ConnectionOnReconnected;
-            await _connection.StopAsync();
+            
         }
-
-        private Task ConnectionOnReconnected(string arg)
-        {
-            _connectedSubject.OnNext(true);
-            return Task.CompletedTask;
-        }
-
-        private Task ConnectionOnClosed(Exception arg)
-        {
-            _connectedSubject.OnNext(false);
-            return Task.CompletedTask;
-        }
-
+        
         public async Task TakeImage()
         {
-            if (_connection == null || _connection.State != HubConnectionState.Connected)
-                return;
-            try
+           /*try
             {
                 await _connection.SendAsync("TakeImage");
             }
-            catch (Exception) { }
+            catch (Exception) { }*/
         }
 
         public async Task StartVideo()
         {
-            if (_connection == null || _connection.State != HubConnectionState.Connected)
+           /* if (_connection == null || _connection.State != HubConnectionState.Connected)
                 return;
             try
             {
                 int interval = Preferences.Get(PreferenceKeys.VideoFrameRate, 500);
                 await _connection.SendAsync("StartVideo", interval);
             }
-            catch (Exception) { }
+            catch (Exception) { }*/
         }
 
         public async Task StopVideo()
         {
-            if (_connection == null || _connection.State != HubConnectionState.Connected)
+          /*  if (_connection == null || _connection.State != HubConnectionState.Connected)
                 return;
             try
             {
                 await _connection.SendAsync("StopVideo");
             }
-            catch (Exception) { }
+            catch (Exception) { }*/
         }
 
         public async Task SetSpeed(int speed)
         {
-            if (_connection == null || _connection.State != HubConnectionState.Connected)
-                return;
             try
             {
-                await _connection.SendAsync("SetSpeed", speed);
-                await _connection.SendAsync("SetLight", "back", speed < 0);
-
+                await _bluetoothService.SendData((byte)speed);
             }
             catch (Exception) { }
         }
 
         public async Task SetSteerPosition(int steerPosition)
         {
-            if (_connection == null || _connection.State != HubConnectionState.Connected)
-                return;
             try
             {
-                await _connection.SendAsync("SetSteerPosition", steerPosition);
+                await _bluetoothService.SendData((byte)steerPosition);
             }
             catch (Exception)
             {
@@ -136,7 +87,7 @@ namespace PlayGround.Services
 
         public IObservable<double> MeasureDistance()
         {
-            if (_connection == null || _connection.State != HubConnectionState.Connected)
+            /*if (_connection == null || _connection.State != HubConnectionState.Connected)
                 return Observable.Return(0.0);
 
             return Observable.Create<double>(observer =>
@@ -151,18 +102,26 @@ namespace PlayGround.Services
                 {
                     _connection.SendAsync("DeactivateDistanceMeasurement");
                 });
-            });
+            });*/
+            return Observable.Return(0.0);
         }
 
         public async Task SetFrontLight(bool value)
         {
-            if (_connection == null || _connection.State != HubConnectionState.Connected)
+           /* if (_connection == null || _connection.State != HubConnectionState.Connected)
                 return;
             try
             {
                 await _connection.SendAsync("SetLight", "front", value);
             }
-            catch (Exception) { }
+            catch (Exception) { }*/
+           try
+           {
+               await _bluetoothService.SendData(value ? 255 : 254);
+           }
+           catch (Exception e)
+           {
+           }
         }
     }
 }
