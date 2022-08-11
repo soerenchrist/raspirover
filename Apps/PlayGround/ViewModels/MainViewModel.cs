@@ -78,7 +78,17 @@ namespace PlayGround.ViewModels
             {
                 await ErrorInteraction.Handle("Es konnte keine Verbindung hergestellt werden");
                 return;
-            }    
+            }
+            
+            // blink front lights when connected
+            for (int i = 0; i < 2; i++)
+            {
+                await ControlService.Current.SetFrontLight(true);
+                await Task.Delay(200);
+                await ControlService.Current.SetFrontLight(false);   
+                if (i != 1)
+                    await Task.Delay(200);
+            }
             
             await Shell.Current.GoToAsync("control");
         }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -56,11 +54,6 @@ namespace PlayGround.Services
         private int Map(int x, int inMin, int inMax, int outMin, int outMax)
         {
             return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
-        }
-
-        public IObservable<double> MeasureDistance()
-        {
-            return Observable.Return(0.0);
         }
 
         public async Task SetFrontLight(bool value)
